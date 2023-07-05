@@ -1,9 +1,9 @@
 #pragma once
 #ifndef MAP_H
 #define MAP_H
-//#include "common.h"
+#include "./Common/common.h"
 #include<map>
-const int MAPSIZE = 10;//map is mapsize*mapsize graph
+//const int MAPSIZE = 10;//map is mapsize*mapsize graph
 //typedef struct node_position
 //{
 //    int x,y;
@@ -26,9 +26,9 @@ private:
     Node graph_1[MAPSIZE][MAPSIZE];
     Node graph_2[MAPSIZE][MAPSIZE];
     int visited[MAPSIZE][MAPSIZE];//only used in judge solution
-//    int map[MAPSIZE][MAPSIZE];//graph
-//    int graph_1[MAPSIZE][MAPSIZE];
-//    int graph_2[MAPSIZE][MAPSIZE];
+    //    int map[MAPSIZE][MAPSIZE];//graph
+    //    int graph_1[MAPSIZE][MAPSIZE];
+    //    int graph_2[MAPSIZE][MAPSIZE];
 };
 
 #endif // MAP_H

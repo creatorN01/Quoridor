@@ -12,6 +12,8 @@ SOURCES += \
     App/exitcommand.cpp \
     App/initcommand.cpp \
     Common/commands.cpp \
+    Model/map.cpp \
+    Model/model.cpp \
     View/barrier_ui.cpp \
     View/map_ui.cpp \
     View/player_ui.cpp \
@@ -32,6 +34,8 @@ HEADERS += \
     App/initcommand.h \
     Common/commands.h \
     Common/common.h \
+    Model/map.h \
+    Model/model.h \
     View/barrier_ui.h \
     View/map_ui.h \
     View/player_ui.h \

@@ -12,14 +12,14 @@ Map::Map()
             graph_1[i][j].down = ((i+1) == MAPSIZE) ? NoWaytoGo : Passable ;
             graph_1[i][j].left = (j == 0) ? NoWaytoGo : Passable;
             graph_1[i][j].right = ((j+1) == MAPSIZE) ? NoWaytoGo : Passable ;
-//            graph_1[i][j].up.x = i-1;
-//            graph_1[i][j].up.y = j;
-//            graph_1[i][j].down.x = ((i+1) == MAPSIZE) ? NoWaytoGo : (i+1) ;
-//            graph_1[i][j].down.y = j;
-//            graph_1[i][j].left.x = i;
-//            graph_1[i][j].left.y = j-1;
-//            graph_1[i][j].right.x = i;
-//            graph_1[i][j].right.y = ((j+1)==MAPSIZE) ? NoWaytoGo : (j+1) ;
+            //            graph_1[i][j].up.x = i-1;
+            //            graph_1[i][j].up.y = j;
+            //            graph_1[i][j].down.x = ((i+1) == MAPSIZE) ? NoWaytoGo : (i+1) ;
+            //            graph_1[i][j].down.y = j;
+            //            graph_1[i][j].left.x = i;
+            //            graph_1[i][j].left.y = j-1;
+            //            graph_1[i][j].right.x = i;
+            //            graph_1[i][j].right.y = ((j+1)==MAPSIZE) ? NoWaytoGo : (j+1) ;
         }
         map[i][j] = graph_2[i][j] = graph_1[i][j];
         visited[i][j] = 0;
