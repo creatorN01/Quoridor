@@ -12,6 +12,11 @@ SOURCES += \
     App/exitcommand.cpp \
     App/initcommand.cpp \
     Common/commands.cpp \
+    View/barrier_ui.cpp \
+    View/map_ui.cpp \
+    View/player_ui.cpp \
+    View/textprompt.cpp \
+    View/view.cpp \
     ViewModel/executeCommand.cpp \
     ViewModel/state/abstractStateNode.cpp \
     ViewModel/state/activePlayerStateNode.cpp \
@@ -20,14 +25,18 @@ SOURCES += \
     ViewModel/stateTransitionCommand.cpp \
     ViewModel/statemachine.cpp \
     ViewModel/viewModel.cpp \
-    main.cpp \
-    widget.cpp
+    main.cpp
 
 HEADERS += \
     App/exitcommand.h \
     App/initcommand.h \
     Common/commands.h \
     Common/common.h \
+    View/barrier_ui.h \
+    View/map_ui.h \
+    View/player_ui.h \
+    View/textprompt.h \
+    View/view.h \
     ViewModel/executeCommand.h \
     ViewModel/state/abstractStateNode.h \
     ViewModel/state/activePlayerStateNode.h \
@@ -35,11 +44,10 @@ HEADERS += \
     ViewModel/state/operationStateNode.h \
     ViewModel/stateTransitionCommand.h \
     ViewModel/statemachine.h \
-    ViewModel/viewModel.h \
-    widget.h
+    ViewModel/viewModel.h
 
 FORMS += \
-    widget.ui
+    View/view.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
