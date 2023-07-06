@@ -23,7 +23,7 @@ enum OperationType
     RemoveBarrier
 };
 
-const int MAPSIZE = 9;
+#define MAPSIZE 9
 
 
 #endif // COMMON_H
