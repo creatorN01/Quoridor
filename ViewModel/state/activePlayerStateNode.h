@@ -12,16 +12,13 @@ class ActivePlayerStateNode : public AbstractStateNode
 {
 public:
     ActivePlayerStateNode();
-    int GetActivePlayer();
-    int GetWaitedPlayer();
+    void SetActivePlayer(PlayerId id);
+    void SetWaitedPlayer(PlayerId id);
+    PlayerId GetActivePlayer();
+    PlayerId GetWaitedPlayer();
 private:
-    PlayerId activePlayer = FIRST;
-    PlayerId waitedPlayer = SECOND;
-
-//    // 前驱节点
-//    AtomicExecuteStateNode preNode;
-//    // 后继节点
-//    OperationStateNode nextNode;
+    PlayerId activePlayer;
+    PlayerId waitedPlayer;
 };
 
 #endif // ACTIVEPLAYERSTATENODE_H

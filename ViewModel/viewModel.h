@@ -3,16 +3,18 @@
 #define VIEWMODEL_H
 
 
-#include "ViewModel/executeCommand.h"
+
 #include "ViewModel/statemachine.h"
 
 class ViewModel
 {
 public:
     ViewModel();
+    // QSharedPointer<ExecuteCommand> GetExecuteCommand();
+    QSharedPointer<StateMachine> GetStateMachine();
+
 private:
-    ExecuteCommand executeCommand;
-    StateMachine stateMachine;
+    QSharedPointer<StateMachine> stateMachine;
 };
 
 #endif // VIEWMODEL_H

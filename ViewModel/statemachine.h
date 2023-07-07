@@ -16,23 +16,52 @@
 
 #include <vector>
 #include <QSharedPointer>
+#include "Common/common.h"
 #include "ViewModel/state/abstractStateNode.h"
 #include "ViewModel/state/activePlayerStateNode.h"
 #include "ViewModel/state/operationStateNode.h"
 #include "ViewModel/state/atomicExecuteStateNode.h"
-#include "ViewModel/stateTransitionCommand.h"
+/*#include "ViewModel/command/stateTransitionCommand.h"
+#include "ViewModel/command/rollbackCommand.h"
+#include "ViewModel/command/selectOperationTypeCommand.h"
+#include "ViewModel/command/selectPositionCommand.h"
+#include "ViewModel/command/setActivePlayerCommand.h"*/
+
 
 
 class StateMachine
 {
 public:
     StateMachine();
+    // 设置初始状态
+    void SetInitialState();
+    void InitPosition();
+    // 状态转移命令
+    bool SetActivePlayerCommand();
+    bool SelectOperationCommand(OperationType operation);
+    bool SelectPositionCommand();
+    bool RollbackCommand();
+
+    // 执行命令
+    void SetExecutionInfo(Direction direction, std::pair<int, int> pos1, std::pair<int, int> pos2);
+    bool ExecuteMoveCommand(std::pair<int, int> position, Direction direction);
+    bool ExecutePlaceBarrierCommand(std::pair<int, int> pos1, std::pair<int, int> pos2);
+    bool ExecuteRemoveBarrierCommand(std::pair<int, int> pos1, std::pair<int, int> pos2);
+
+    // 接口
+    void SetPlayerNum(int num);
+    void SetPosition();
+    State GetCurState();
 
 private:
+    // 状态节点组成的数组 activePlayer, operation, atomicExecute, 三种状态循环往复
     std::vector<QSharedPointer<AbstractStateNode>> nodeList;
-    int curNodeIndex;
-    std::vector<std::pair<int, std::pair<int, int>>> curPosition;
-    StateTransitionCommand stateTransitionCommand;
+    // 表征状态的索引
+    State curNodeIndex;
+    // 玩家个数和坐标
+    int playerNum;
+    std::vector<std::pair<PlayerId, std::pair<int, int>>> curPosition;
+
 };
 
 #endif // STATEMACHINE_H

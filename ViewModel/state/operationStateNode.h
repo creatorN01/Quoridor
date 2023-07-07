@@ -15,7 +15,8 @@ class OperationStateNode : public AbstractStateNode
 {
 public:
     OperationStateNode();
-    int getOperationType();
+    OperationType GetOperationType();
+    void SetOperationType(OperationType type);
 
 private:
     OperationType operationType;
