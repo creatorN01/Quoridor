@@ -10,8 +10,13 @@ class AtomicExecuteStateNode : public AbstractStateNode
 {
 public:
     AtomicExecuteStateNode();
-    std::pair<int, int> getPosition1();
-    std::pair<int, int> getPosition2();
+
+    void SetDirection(Direction direction_);
+    void SetPosition(std::pair<int, int> pos1_, std::pair<int, int> pos2_);
+
+    Direction GetDirection();
+    std::pair<int, int> GetPosition1();
+    std::pair<int, int> GetPosition2();
 private:
     Direction direction;
     std::pair<int, int> pos1;

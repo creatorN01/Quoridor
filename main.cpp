@@ -1,5 +1,5 @@
 
-#include "widget.h"
+#include "App/app.h"
 
 #include <QApplication>
 
@@ -7,7 +7,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Widget w;
-    w.show();
+    App app;
+    QSharedPointer<InitCommand> init = app.getInitCommand();
+
+
     return a.exec();
 }
