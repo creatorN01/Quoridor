@@ -240,7 +240,7 @@ bool Map::Add(PlayerId player_id, std::pair<int,int>point_1 ,std::pair<int,int>p
     else if(y_1 == y_2)//横着的杆子
     {
         //point_1
-        //-------
+        //------
         //point_2
         if(x_1 < x_2)
         {
