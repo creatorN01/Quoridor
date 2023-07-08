@@ -36,6 +36,8 @@ bool Map::Solve(PlayerId player_id, int Curr_X, int Curr_Y)
 }
 bool Map::JudgeSolution(PlayerId player_id, int Curr_X, int Curr_Y)
 {
+    if(Curr_X < 0 || Curr_X >= MAPSIZE || Curr_Y < 0 || Curr_Y >= MAPSIZE)//out of range of map
+        return false;
     visited[Curr_X][Curr_Y] = 1;
     if(player_id==PlayerId::FIRST)//first
     {
