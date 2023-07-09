@@ -3,7 +3,8 @@
 
 App::App()
 {
-
+    // 进行一些view层的信号与槽函数的绑定工作
+    // 但是现在还不能确定
 }
 
 void App::InitGameEnv()
@@ -22,7 +23,7 @@ void App::InitGameEnv()
     // view层初始化
     // 由于view层的部分内容还未敲定，一些绑定函数的工作也需要在这里去完成
     view = QSharedPointer<View>::create();
-
+    view->initUI();
     // 利用lambda表达式对仿函数进行绑定
     // 这里只需要绑定ViewModel和View的函数，不需要处理信号和槽
     // 信号和槽的绑定放在view层来做
@@ -37,7 +38,7 @@ void App::InitGameEnv()
 }
 void App::Run()
 {
-
+    view->show();
 }
 void App::ExitGame()
 {
