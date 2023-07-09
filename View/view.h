@@ -39,16 +39,16 @@ public:
     void set_game_status_command(QSharedPointer<Commands>);
     void set_move_command(QSharedPointer<Commands>);
 
-    void set_get_ice_pos(const std::function<QPoint(void)>&&);
-    void set_get_fire_pos(const std::function<QPoint(void)>&&);
+//    void set_get_ice_pos(const std::function<QPoint(void)>&&);
+//    void set_get_fire_pos(const std::function<QPoint(void)>&&);
 
     // 信号和槽等到第一轮迭代开始时，再写~
 
 
     void initUI();                      // 初始化绘制
-    void mousePressEvent(QMouseEvent *event) override; // 鼠标点击时间
+    // void mousePressEvent(QMouseEvent *event) override; // 鼠标点击时间
 
-public slots:
+// public slots:
     void react_game_status_change(const GameStatus &status); // 接收游戏状态改变的信号
 
 private:
@@ -72,16 +72,16 @@ private:
 
 
 
-    QSharedPointer<Commands> first_player_move;
-    QSharedPointer<Commands> second_player_move;
-    QSharedPointer<Commands> first_player_put;
-    QSharedPointer<Commands> second_player_put;
-    QSharedPointer<Commands> first_player_break;
-    QSharedPointer<Commands> second_player_break;
+//    QSharedPointer<Commands> first_player_move;
+//    QSharedPointer<Commands> second_player_move;
+//    QSharedPointer<Commands> first_player_put;
+//    QSharedPointer<Commands> second_player_put;
+//    QSharedPointer<Commands> first_player_break;
+//    QSharedPointer<Commands> second_player_break;
 
 
-    std::function<QPoint(void)> get_first_player_pos;
-    std::function<QPoint(void)> get_second_player_pos;
+//    std::function<QPoint(void)> get_first_player_pos;
+//    std::function<QPoint(void)> get_second_player_pos;
 
 
 };

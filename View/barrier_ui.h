@@ -23,10 +23,10 @@ public:
 private:
     // 四种图像作为静态成员存储更合适一些，所有的对象共用一份
     // 不知道会不会在显示的时候出bug...实在不行，再改
-    static QPixmap img_barrier1_row;
-    static QPixmap img_barrier1_column;
-    static QPixmap img_barrier2_row;
-    static QPixmap img_barrier2_column;
+    QPixmap img_barrier1_row;
+    QPixmap img_barrier1_column;
+    QPixmap img_barrier2_row;
+    QPixmap img_barrier2_column;
 
     // 基准点坐标，就中心点好了
     QPoint pos;
@@ -36,4 +36,5 @@ private:
     BarrierType type;
 };
 // 记得给静态成员赋值~
+
 #endif // BARRIER_UI_H

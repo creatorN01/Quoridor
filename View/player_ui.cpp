@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QDir>
 
-Player_ui::Player_ui(const PlayerId id, const QPoint pos, const bool isSelected, QWidget *parent) : QWidget{parent}, id(id)
+Player_ui::Player_ui(const PlayerId id, QWidget *parent) : QWidget{parent}, id(id)
 {
     QString path = "://GameKit//";
     if (id == FIRST) path += "FIRST_";

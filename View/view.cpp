@@ -29,15 +29,15 @@ View::~View()
     delete ui;
 }
 
-void View::set_game_status_command(QSharedPointer<Commands> command)
-{
-    game_status_command = command;
-}
+//void View::set_game_status_command(QSharedPointer<Commands> command)
+//{
+//    game_status_command = command;
+//}
 
-void View::set_move_command(QSharedPointer<Commands> command)
-{
-    move_command = command;
-}
+//void View::set_move_command(QSharedPointer<Commands> command)
+//{
+//    move_command = command;
+//}
 
 void View::initUI()
 {
