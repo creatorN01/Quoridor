@@ -8,10 +8,10 @@ Map::Map()
     {
         for(j=0;j<MAPSIZE;j++)
         {
-            graph_1[i][j].up = (i == 0) ? NoWaytoGo : Passable;
-            graph_1[i][j].down = ((i+1) == MAPSIZE) ? NoWaytoGo : Passable ;
-            graph_1[i][j].left = (j == 0) ? NoWaytoGo : Passable;
-            graph_1[i][j].right = ((j+1) == MAPSIZE) ? NoWaytoGo : Passable ;
+            graph_1[i][j].up = (i == 0) ? Accessibility::NOWAY : Accessibility::PASSABLE;
+            graph_1[i][j].down = ((i + 1) == MAPSIZE) ? Accessibility::NOWAY : Accessibility::PASSABLE;
+            graph_1[i][j].left = (j == 0) ? Accessibility::NOWAY : Accessibility::PASSABLE;
+            graph_1[i][j].right = ((j + 1) == MAPSIZE) ? Accessibility::NOWAY : Accessibility::PASSABLE;
             map[i][j] = graph_2[i][j] = graph_1[i][j];
             visited[i][j] = 0;
         }
@@ -40,28 +40,28 @@ bool Map::Solve(PlayerId player_id, int Curr_X, int Curr_Y)/*JudgeSolution*/
         if (Curr_X == 0)/*first player reach top*/
             return true;
         bool tmp = false;
-        if ((graph_1[Curr_X][Curr_Y].down == 1) && (visited[Curr_X + 1][Curr_Y] == 0))/*go down*/
+        if ((graph_1[Curr_X][Curr_Y].down == Accessibility::PASSABLE) && (visited[Curr_X + 1][Curr_Y] == 0))/*go down*/
         {
             Curr_X++;
             tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X--][Curr_Y] = 0; }
             else return true;
         }
-        if (graph_1[Curr_X][Curr_Y].up == 1 && visited[Curr_X - 1][Curr_Y] == 0)/*go up*/
+        if (graph_1[Curr_X][Curr_Y].up == Accessibility::PASSABLE && visited[Curr_X - 1][Curr_Y] == 0)/*go up*/
         {
             Curr_X--;
             tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X++][Curr_Y] = 0; }
             else return true;
         }
-        if (graph_1[Curr_X][Curr_Y].left == 1 && visited[Curr_X][Curr_Y - 1] == 0)/*go left*/
+        if (graph_1[Curr_X][Curr_Y].left == Accessibility::PASSABLE && visited[Curr_X][Curr_Y - 1] == 0)/*go left*/
         {
             Curr_Y--;
             tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X][Curr_Y++] = 0; }
             else return true;
         }
-        if (graph_1[Curr_X][Curr_Y].right == 1 && visited[Curr_X][Curr_Y + 1] == 0)/*go right*/
+        if (graph_1[Curr_X][Curr_Y].right == Accessibility::PASSABLE && visited[Curr_X][Curr_Y + 1] == 0)/*go right*/
         {
             Curr_Y++;
             tmp = Solve(player_id, Curr_X, Curr_Y);
@@ -75,28 +75,28 @@ bool Map::Solve(PlayerId player_id, int Curr_X, int Curr_Y)/*JudgeSolution*/
         if (Curr_X == MAPSIZE - 1)/*second player reach bottom*/
             return true;
         bool tmp = false;
-        if (graph_2[Curr_X][Curr_Y].down == 1 && visited[Curr_X + 1][Curr_Y] == 0)/*go down*/
+        if (graph_2[Curr_X][Curr_Y].down == Accessibility::PASSABLE && visited[Curr_X + 1][Curr_Y] == 0)/*go down*/
         {
             Curr_X++;
             tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X--][Curr_Y] = 0; }
             else return true;
         }
-        if (graph_2[Curr_X][Curr_Y].up == 1 && visited[Curr_X - 1][Curr_Y] == 0)/*go up*/
+        if (graph_2[Curr_X][Curr_Y].up == Accessibility::PASSABLE && visited[Curr_X - 1][Curr_Y] == 0)/*go up*/
         {
             Curr_X--;
             tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X++][Curr_Y] = 0; }
             else return true;
         }
-        if (graph_2[Curr_X][Curr_Y].left == 1 && visited[Curr_X][Curr_Y - 1] == 0)/*go left*/
+        if (graph_2[Curr_X][Curr_Y].left == Accessibility::PASSABLE && visited[Curr_X][Curr_Y - 1] == 0)/*go left*/
         {
             Curr_Y--;
             tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X][Curr_Y++] = 0; }
             else return true;
         }
-        if (graph_2[Curr_X][Curr_Y].right == 1 && visited[Curr_X][Curr_Y + 1] == 0)/*go right*/
+        if (graph_2[Curr_X][Curr_Y].right == Accessibility::PASSABLE && visited[Curr_X][Curr_Y + 1] == 0)/*go right*/
         {
             Curr_Y++;
             tmp = Solve(player_id, Curr_X, Curr_Y);
@@ -117,14 +117,14 @@ bool Map::Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2)/*move
     /*p_2 p_1*/
     if(x_1 == x_2 && y_1 > y_2)
     {
-        if(map[x_1][y_1].left == 1 && map[x_2][y_2].right == 1) return true;
+        if(map[x_1][y_1].left == Accessibility::PASSABLE && map[x_2][y_2].right == Accessibility::PASSABLE) return true;
         return false;
     }
 
     /*p_1 p_2*/
     if(x_1 == x_2 && y_1 < y_2)
     {
-        if(map[x_1][y_1].right == 1 && map[x_2][y_2].left == 1) return true;
+        if(map[x_1][y_1].right == Accessibility::PASSABLE && map[x_2][y_2].left == Accessibility::PASSABLE) return true;
         return false;
     }
 
@@ -133,7 +133,7 @@ bool Map::Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2)/*move
          p_1   */
     if(y_1 == y_2 && x_1 > x_2)
     {
-        if(map[x_1][y_1].up == 1 && map[x_2][y_2].down == 1) return true;
+        if(map[x_1][y_1].up == Accessibility::PASSABLE && map[x_2][y_2].down == Accessibility::PASSABLE) return true;
         return false;
     }
 
@@ -142,7 +142,7 @@ bool Map::Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2)/*move
          p_2  */
     if(y_1 == y_2 && x_1 < x_2)
     {
-        if(map[x_1][y_1].down == 1 && map[x_2][y_2].up == 1) return true;
+        if(map[x_1][y_1].down == Accessibility::PASSABLE && map[x_2][y_2].up == Accessibility::PASSABLE) return true;
         return false;
     }
     return false;
@@ -160,21 +160,21 @@ bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int
     {
         if(y_1 < y_2)/*point_1 | point_2*/
         {
-            map[x_1][y_1].right = map[x_2][y_2].left = NoWaytoGo;
+            map[x_1][y_1].right = map[x_2][y_2].left = Accessibility::NOWAY;
             if(player_id == PlayerId::FIRST)/*first*/
             {
-                graph_2[x_1][y_1].right = graph_2[x_2][y_2].left = NoWaytoGo;
+                graph_2[x_1][y_1].right = graph_2[x_2][y_2].left = Accessibility::NOWAY;
             }else{/*second*/
-                graph_1[x_1][y_1].right = graph_1[x_2][y_2].left = NoWaytoGo;
+                graph_1[x_1][y_1].right = graph_1[x_2][y_2].left = Accessibility::NOWAY;
             }
             return true;
         }else{/*point_2 | point_1*/
-            map[x_1][y_1].left = map[x_2][y_2].right = NoWaytoGo;
+            map[x_1][y_1].left = map[x_2][y_2].right = Accessibility::NOWAY;
             if(player_id == PlayerId::FIRST)/*first*/
             {
-                graph_2[x_1][y_1].left = graph_2[x_2][y_2].right = NoWaytoGo;
+                graph_2[x_1][y_1].left = graph_2[x_2][y_2].right = Accessibility::NOWAY;
             }else{/*second*/
-                graph_1[x_1][y_1].left = graph_1[x_2][y_2].right = NoWaytoGo;
+                graph_1[x_1][y_1].left = graph_1[x_2][y_2].right = Accessibility::NOWAY;
             }
             return true;
         }
@@ -186,12 +186,12 @@ bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int
             point_2 */
         if(x_1 < x_2)
         {
-            map[x_1][y_1].down = map[x_2][y_2].up = NoWaytoGo;
+            map[x_1][y_1].down = map[x_2][y_2].up = Accessibility::NOWAY;
             if(player_id == PlayerId::FIRST)/*first*/
             {
-                graph_2[x_1][y_1].down = graph_2[x_2][y_2].up = NoWaytoGo;
+                graph_2[x_1][y_1].down = graph_2[x_2][y_2].up = Accessibility::NOWAY;
             }else{/*second*/
-                graph_1[x_1][y_1].down = graph_1[x_2][y_2].up = NoWaytoGo;
+                graph_1[x_1][y_1].down = graph_1[x_2][y_2].up = Accessibility::NOWAY;
             }
             return true;
         }
@@ -199,12 +199,12 @@ bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int
             -------
             point_1 */
         else{
-            map[x_1][y_1].up = map[x_2][y_2].down = NoWaytoGo;
+            map[x_1][y_1].up = map[x_2][y_2].down = Accessibility::NOWAY;
             if(player_id == PlayerId::FIRST)/*first*/
             {
-                graph_2[x_1][y_1].up = graph_2[x_2][y_2].down = NoWaytoGo;
+                graph_2[x_1][y_1].up = graph_2[x_2][y_2].down = Accessibility::NOWAY;
             }else{/*second*/
-                graph_1[x_1][y_1].up = graph_1[x_2][y_2].down = NoWaytoGo;
+                graph_1[x_1][y_1].up = graph_1[x_2][y_2].down = Accessibility::NOWAY;
             }
             return true;
         }
@@ -224,22 +224,14 @@ bool Map::Add(PlayerId player_id, std::pair<int,int>point_1 ,std::pair<int,int>p
     {
         if(y_1 < y_2)/*point_1 | point_2*/
         {
-            map[x_1][y_1].right = map[x_2][y_2].left = Passable;
-//            if(player_id == PlayerId::FIRST)/*first*/
-//            {
-                graph_2[x_1][y_1].right = graph_2[x_2][y_2].left = Passable;
-            //}else{/*second*/
-                graph_1[x_1][y_1].right = graph_1[x_2][y_2].left = Passable;
-            //}
+            map[x_1][y_1].right = map[x_2][y_2].left = Accessibility::PASSABLE;
+            graph_2[x_1][y_1].right = graph_2[x_2][y_2].left = Accessibility::PASSABLE;
+            graph_1[x_1][y_1].right = graph_1[x_2][y_2].left = Accessibility::PASSABLE;
             return true;
         }else{/*point_2 | point_1*/
-            map[x_1][y_1].left = map[x_2][y_2].right = Passable;
-//            if(player_id == PlayerId::FIRST)/*first*/
-//            {
-                graph_2[x_1][y_1].left = graph_2[x_2][y_2].right = Passable;
-            //}else{/*second*/
-                graph_1[x_1][y_1].left = graph_1[x_2][y_2].right = Passable;
-            //}
+            map[x_1][y_1].left = map[x_2][y_2].right = Accessibility::PASSABLE;
+            graph_2[x_1][y_1].left = graph_2[x_2][y_2].right = Accessibility::PASSABLE;
+            graph_1[x_1][y_1].left = graph_1[x_2][y_2].right = Accessibility::PASSABLE;
             return true;
         }
     }
@@ -250,26 +242,18 @@ bool Map::Add(PlayerId player_id, std::pair<int,int>point_1 ,std::pair<int,int>p
             point_2   */
         if(x_1 < x_2)
         {
-            map[x_1][y_1].down = map[x_2][y_2].up = Passable;
-//            if(player_id == PlayerId::FIRST)/*first*/
-//            {
-                graph_2[x_1][y_1].down = graph_2[x_2][y_2].up = Passable;
-            //}else{/*second*/
-                graph_1[x_1][y_1].down = graph_1[x_2][y_2].up = Passable;
-            //}
+            map[x_1][y_1].down = map[x_2][y_2].up = Accessibility::PASSABLE;
+            graph_2[x_1][y_1].down = graph_2[x_2][y_2].up = Accessibility::PASSABLE;
+            graph_1[x_1][y_1].down = graph_1[x_2][y_2].up = Accessibility::PASSABLE;
             return true;
         }
         /*  point_2
             -------
             point_1  */
         else{
-            map[x_1][y_1].up = map[x_2][y_2].down = Passable;
-//            if(player_id == PlayerId::FIRST)/*first*/
-//            {
-                graph_2[x_1][y_1].up = graph_2[x_2][y_2].down = Passable;
-            //}else{/*second*/
-                graph_1[x_1][y_1].up = graph_1[x_2][y_2].down = Passable;
-            //}
+            map[x_1][y_1].up = map[x_2][y_2].down = Accessibility::PASSABLE;
+            graph_2[x_1][y_1].up = graph_2[x_2][y_2].down = Accessibility::PASSABLE;
+            graph_1[x_1][y_1].up = graph_1[x_2][y_2].down = Accessibility::PASSABLE;
             return true;
         }
     }

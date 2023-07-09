@@ -2,14 +2,9 @@
 #ifndef MAP_H
 #define MAP_H
 #include "./Common/common.h"
-#include<map>
-//const int MAPSIZE = 10;//map is mapsize*mapsize graph
-//typedef struct node_position
-//{
-//    int x,y;
-//} NodePosition;
+#include <map>
 typedef struct node{
-    int up,down,left,right;//NodePosition
+    Accessibility up,down,left,right;//NodePosition
 } Node;
 #define NoWaytoGo -1
 #define Passable 1;
