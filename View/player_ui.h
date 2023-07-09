@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <QPainter>
 #include "Common/common.h"
+#include <QMouseEvent>
 
 // 玩家
 class Player_ui : public QWidget
@@ -21,6 +22,7 @@ public:
     PlayerId& get_id();
     bool& get_isSelected();
     QPoint& get_pos();
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     PlayerId id;        // 玩家id (enum类型)
@@ -28,6 +30,11 @@ private:
     bool isSelected;    // 是否被选中，选中要闪烁，并显示可选择的目标位
     QPixmap img_player; // 棋子的图像
     QPixmap img_select; // 选中后的目标位的图像
+
+    QPixmap img_arrow_up;
+    QPixmap img_arrow_down;
+    QPixmap img_arrow_left;
+    QPixmap img_arrow_right;
 };
 
 #endif // PLAYER_UI_H

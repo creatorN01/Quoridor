@@ -5,11 +5,12 @@
 #include <QMainWindow>
 #include <QSet>
 #include <QSharedPointer>
+#include <QTimer>
 #include "View/barrier_ui.h"
 #include "View/player_ui.h"
 #include "View/map_ui.h"
 #include "View/textprompt.h"
-#include <QTimer>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
