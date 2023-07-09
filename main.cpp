@@ -1,6 +1,6 @@
 
 #include "App/app.h"
-
+#include <QDebug>
 #include <QApplication>
 
 

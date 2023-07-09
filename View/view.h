@@ -10,6 +10,7 @@
 #include "View/map_ui.h"
 #include "View/textprompt.h"
 #include <QTimer>
+#include "QMouseEvent"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -48,10 +49,16 @@ public:
     void initUI();                      // 初始化绘制
     // void mousePressEvent(QMouseEvent *event) override; // 鼠标点击时间
 
+signals:
+    void mySignal(QPoint pos);
+
 // public slots:
     void react_game_status_change(const GameStatus &status); // 接收游戏状态改变的信号
+//public slots:
+//    void test(QPoint clickedPosition);
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *e) override;
 
 private:
     // ui指针
