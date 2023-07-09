@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>GameKit/background.jpg</file>
+        <file>GameKit/barrier1_column.jpg</file>
+        <file>GameKit/barrier1_row.jpg</file>
+        <file>GameKit/barrier2_column.jpg</file>
+        <file>GameKit/barrier2_row.jpg</file>
+        <file>GameKit/FIRST_player.png</file>
+        <file>GameKit/SECOND_player.png</file>
+    </qresource>
+</RCC>

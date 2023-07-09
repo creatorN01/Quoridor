@@ -10,6 +10,7 @@
 #include "View/map_ui.h"
 #include "View/textprompt.h"
 #include <QTimer>
+#include "QMouseEvent"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -39,17 +40,25 @@ public:
     void set_game_status_command(QSharedPointer<Commands>);
     void set_move_command(QSharedPointer<Commands>);
 
-    void set_get_ice_pos(const std::function<QPoint(void)>&&);
-    void set_get_fire_pos(const std::function<QPoint(void)>&&);
+//    void set_get_ice_pos(const std::function<QPoint(void)>&&);
+//    void set_get_fire_pos(const std::function<QPoint(void)>&&);
 
     // 信号和槽等到第一轮迭代开始时，再写~
 
-protected:
-    void paintEvent(QPaintEvent *) override; // 绘制事件，通过update()函数激活
-    void mousePressEvent(QMouseEvent *event) override; // 鼠标点击时间
 
-public slots:
+    void initUI();                      // 初始化绘制
+    // void mousePressEvent(QMouseEvent *event) override; // 鼠标点击时间
+
+signals:
+    void mySignal(QPoint pos);
+
+// public slots:
     void react_game_status_change(const GameStatus &status); // 接收游戏状态改变的信号
+//public slots:
+//    void test(QPoint clickedPosition);
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *e) override;
 
 private:
     // ui指针
@@ -64,20 +73,26 @@ private:
     // 初步觉得用一个vector存，后期如果有不方便的地方，可以再调整，换成map什么的
     std::vector<QSharedPointer<Barrier_ui>> Barrier_ui_List;
 
-    QSharedPointer<Commands> first_player_move;
-    QSharedPointer<Commands> second_player_move;
-    QSharedPointer<Commands> first_player_put;
-    QSharedPointer<Commands> second_player_put;
-    QSharedPointer<Commands> first_player_break;
-    QSharedPointer<Commands> second_player_break;
-
-
-    std::function<QPoint(void)> get_first_player_pos;
-    std::function<QPoint(void)> get_second_player_pos;
-
     QTimer* timer;
-    int curFrame; // 用于绘制地图，记录帧数
+    // int curFrame; // 用于绘制地图，记录帧数
     GameStatus game_status; // 游戏状态
+
+
+
+
+
+//    QSharedPointer<Commands> first_player_move;
+//    QSharedPointer<Commands> second_player_move;
+//    QSharedPointer<Commands> first_player_put;
+//    QSharedPointer<Commands> second_player_put;
+//    QSharedPointer<Commands> first_player_break;
+//    QSharedPointer<Commands> second_player_break;
+
+
+//    std::function<QPoint(void)> get_first_player_pos;
+//    std::function<QPoint(void)> get_second_player_pos;
+
+
 };
 
 #endif // VIEW_H

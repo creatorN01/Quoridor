@@ -5,18 +5,22 @@ Barrier_ui::Barrier_ui(QWidget *parent)
     : QWidget{parent}
 {
     //为静态变量赋值
-    if(img_barrier1_row.isNull()) {
-        img_barrier1_row.load(":/source/image/barrier1_row.jpg");
-    }
-    if(img_barrier1_column.isNull()) {
-        img_barrier1_column.load(":/source/image/img_barrier1_column.jpg");
-    }
-    if(img_barrier1_row.isNull()) {
-        img_barrier2_row.load(":/source/image/img_barrier2_row.jpg");
-    }
-    if(img_barrier1_row.isNull()) {
-        img_barrier2_column.load(":/source/image/img_barrier2_column.jpg");
-    }
+//    if(img_barrier1_row.isNull()) {
+//        img_barrier1_row.load(":/GameKit/barrier1_row.jpg");
+//    }
+//    if(img_barrier1_column.isNull()) {
+//        img_barrier1_column.load(":/GameKit/img_barrier1_column.jpg");
+//    }
+//    if(img_barrier1_row.isNull()) {
+//        img_barrier2_row.load(":/GameKit/img_barrier2_row.jpg");
+//    }
+//    if(img_barrier1_row.isNull()) {
+//        img_barrier2_column.load(":/GameKit/img_barrier2_column.jpg");
+//    }
+    img_barrier1_row.load(":/GameKit/1.jpg");
+    img_barrier1_column.load(":/GameKit/2.jpg");
+    img_barrier2_row.load(":/GameKit/3.jpg");
+    img_barrier2_column.load(":/GameKit/4.jpg");
 }
 
 void Barrier_ui::paint(QPainter &painter, int width, int height, const QPoint& pos, const PlayerId& id, const BarrierType& type) {

@@ -34,4 +34,18 @@ enum State
 
 const int PLAYERNUM = 2;
 
+enum BarrierType
+{
+    horizontal,
+    vertical
+};
+
+enum GameStatus
+{
+    INIT = 0,
+    PLAYING,
+    FIRST_WIN,
+    SECOND_WIN
+};
+
 #endif // COMMON_H
