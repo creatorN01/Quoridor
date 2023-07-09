@@ -4,7 +4,7 @@
 
 Player_ui::Player_ui(const PlayerId id, QWidget *parent) : QWidget{parent}, id(id)
 {
-    QString path = "://GameKit//";
+    QString path = "://image//GameKit//";
     if (id == FIRST) path += "FIRST_";
     else path += "SECOND_";
 
