@@ -3,7 +3,8 @@
 
 App::App()
 {
-
+    // connect...
+    // 1. WhenClicked作为槽函数
 }
 
 void App::InitGameEnv()
@@ -44,4 +45,21 @@ void App::ExitGame()
 
 }
 
-
+void App::When_clicked(QPoint clickedPosition)
+{
+    // 从状态机里拿当前状态
+    auto stateMachine = view_model->GetStateMachine();
+    auto curState = stateMachine->GetCurState();
+    // 从map里拿图
+    auto map = model->GetMap();
+    // 根据状态进行分支
+    switch (curState)
+    {
+      case ActivePlayer:
+        break;
+      case Operation:
+        break;
+      case AtomicExecute:
+        break;
+    }
+}

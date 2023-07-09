@@ -5,6 +5,7 @@ class Model
 {
 public:
     Model();
+    Map GetMap();
 private:
     Map WholeMap;
 };
