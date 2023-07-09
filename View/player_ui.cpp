@@ -5,24 +5,41 @@
 Player_ui::Player_ui(const PlayerId id, QWidget *parent) : QWidget(parent), id(id), isSelected(false)
 {
     QString path = "://images//GameKit//";
-    if (id == FIRST) path += "FIRST_";
-    else path += "SECOND_";
+//     if (id == FIRST) path += "FIRST_";
+//     else path += "SECOND_";
+//     // 静止图像
+//     img_player.load(path + "player.png");
+
+//     img_arrow_up.load(":/images/GameKit/arrow_up.png");
+//     img_arrow_down.load(":/images/GameKit/arrow_down.png");
+//     img_arrow_left.load(":/images/GameKit/arrow_left.png");
+//     img_arrow_right.load(":/images/GameKit/arrow_right.png");
+
+//     // 设置鼠标跟踪，以接收鼠标事件
+//     setMouseTracking(true);
+
+//     // 初始化 pos
+//     pos = QPoint(0, 0); // 根据实际情况设置初始坐标
+// }
+
+    if (id == FIRST)
+        path += "FIRST_";
+    else
+        path += "SECOND_";
+
     // 静止图像
     img_player.load(path + "player.png");
 
-    img_arrow_up.load(":/images/GameKit/arrow_up.png");
-    img_arrow_down.load(":/images/GameKit/arrow_down.png");
-    img_arrow_left.load(":/images/GameKit/arrow_left.png");
-    img_arrow_right.load(":/images/GameKit/arrow_right.png");
-
-    // 设置鼠标跟踪，以接收鼠标事件
-    setMouseTracking(true);
-
-    // 初始化 pos
-    pos = QPoint(0, 0); // 根据实际情况设置初始坐标
+    //    //选中后闪烁图像
+    //    img_select.load(path + "select.png");
 }
 
-void Player_ui::paint(QPainter &painter, const QPoint pos, int width, int height) {
+void Player_ui::paint(QPainter &painter, const QPoint pos, int width, int height)
+{
+    //    if(isSelected) {
+    //        painter.drawPixmap(pos.x(), pos.y(), img_select.scaled(width, height, Qt::KeepAspectRatio));
+
+    //    }
     painter.drawPixmap(pos.x(), pos.y(), img_player.scaled(width, height, Qt::KeepAspectRatio));
 
     if (isSelected) {
@@ -65,23 +82,27 @@ void Player_ui::set_pos(const QPoint &pos)
     this->pos = pos;
 }
 
-void Player_ui::set_selected(const bool& isSelected)
+void Player_ui::set_selected(const bool &isSelected)
 {
     this->isSelected = isSelected;
 }
 
-void Player_ui::set_playerId(const PlayerId id) {
+void Player_ui::set_playerId(const PlayerId id)
+{
     this->id = id;
 }
 
-PlayerId& Player_ui::get_id() {
+PlayerId &Player_ui::get_id()
+{
     return id;
 }
 
-bool& Player_ui::get_isSelected() {
+bool &Player_ui::get_isSelected()
+{
     return this->isSelected;
 }
 
-QPoint& Player_ui::get_pos() {
+QPoint &Player_ui::get_pos()
+{
     return this->pos;
 }

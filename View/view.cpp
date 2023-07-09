@@ -23,6 +23,8 @@ View::View(QWidget *parent)
 
     // 如果完全贴合图片大小，某些屏幕上可能显示不全
     this->setFixedSize(1500, 900);
+
+    // connect(this, SIGNAL(mySignal(QPoint)), this, SLOT(test(QPoint)));
 }
 
 View::~View()
@@ -57,3 +59,21 @@ void View::paintEvent(QPaintEvent *event)
     player2->paint(painter, player2->get_pos(), 100, 100);
 
 }
+
+
+void View::mousePressEvent(QMouseEvent *e)
+{
+    qDebug() << "hello";
+    auto touchPoint = e->pos();
+    qDebug() << touchPoint;
+
+    qDebug() << "准备emit";
+    emit mySignal(touchPoint);
+    // qDebug() << "emit信号";
+}
+
+//void View::test(QPoint clickedPosition)
+//{
+//    qDebug() << "收到emit信号";
+//}
+
