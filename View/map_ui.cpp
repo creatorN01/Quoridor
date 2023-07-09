@@ -4,7 +4,7 @@
 Map_ui::Map_ui(QWidget *parent) : QWidget(parent)
 {
     // 加载素材图像
-    img_map.load(":/source/image/background.jpg");
+    img_map.load(":/GameKit/background.jpg");
 }
 
 void Map_ui::paint(QPainter &painter, int width, int height)

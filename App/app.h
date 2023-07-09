@@ -18,6 +18,11 @@ public:
     void InitGameEnv();
     void Run();
     void ExitGame();
+
+    // 收到鼠标点击信号后触发的槽函数，传入鼠标点击的具体位置
+// public slots:
+    void When_clicked(QPoint clickedPosition);
+
 private:
     QSharedPointer<View> view;
     QSharedPointer<Model> model;

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 10.0.2, 2023-07-06T11:05:42. -->
-<!-- Written by QtCreator 10.0.0, 2023-07-07T18:36:50. -->
+<!-- Written by QtCreator 10.0.0, 2023-07-09T12:49:55. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -237,8 +236,6 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/jiangyi/Desktop/Quoridor/Quoridor.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/jiangyi/Desktop/Quoridor/Quoridor.pro</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:D:/Quoridor/Quoridor.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/Quoridor/Quoridor.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
@@ -246,7 +243,6 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/jiangyi/Desktop/build-Quoridor-Desktop_Qt_5_15_2_MinGW_64_bit-Debug</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">D:/Project/qt/MVVM/build-mvvm_template-Desktop_Qt_6_2_4_MinGW_64_bit-Debug</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>

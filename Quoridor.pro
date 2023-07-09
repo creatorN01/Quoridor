@@ -17,12 +17,10 @@ SOURCES += \
     View/player_ui.cpp \
     View/textprompt.cpp \
     View/view.cpp \
-    ViewModel/executeCommand.cpp \
     ViewModel/state/abstractStateNode.cpp \
     ViewModel/state/activePlayerStateNode.cpp \
     ViewModel/state/atomicExecuteStateNode.cpp \
     ViewModel/state/operationStateNode.cpp \
-    ViewModel/stateTransitionCommand.cpp \
     ViewModel/statemachine.cpp \
     ViewModel/viewModel.cpp \
     main.cpp
@@ -37,12 +35,10 @@ HEADERS += \
     View/player_ui.h \
     View/textprompt.h \
     View/view.h \
-    ViewModel/executeCommand.h \
     ViewModel/state/abstractStateNode.h \
     ViewModel/state/activePlayerStateNode.h \
     ViewModel/state/atomicExecuteStateNode.h \
     ViewModel/state/operationStateNode.h \
-    ViewModel/stateTransitionCommand.h \
     ViewModel/statemachine.h \
     ViewModel/viewModel.h
 

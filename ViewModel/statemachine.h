@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <QSharedPointer>
+#include "Model/model.h"
 #include "Common/common.h"
 #include "ViewModel/state/abstractStateNode.h"
 #include "ViewModel/state/activePlayerStateNode.h"
@@ -44,7 +45,7 @@ public:
 
     // 执行命令
     void SetExecutionInfo(Direction direction, std::pair<int, int> pos1, std::pair<int, int> pos2);
-    bool ExecuteMoveCommand(std::pair<int, int> position, Direction direction);
+    bool ExecuteMoveCommand(PlayerId curActivePlayer, std::pair<int, int> position, Direction direction);
     bool ExecutePlaceBarrierCommand(std::pair<int, int> pos1, std::pair<int, int> pos2);
     bool ExecuteRemoveBarrierCommand(std::pair<int, int> pos1, std::pair<int, int> pos2);
 
@@ -52,6 +53,12 @@ public:
     void SetPlayerNum(int num);
     void SetPosition();
     State GetCurState();
+
+//    // 绑定仿函数的方法
+//    void set_get_JudgeSolution(const std::function<bool(PlayerId, int, int)>&&);
+//    void set_get_Accessiable(const std::function<bool(std::pair<int, int>, std::pair<int, int>)>&&);
+//    void set_get_Remove(const std::function<bool(PlayerId, std::pair<int, int>, std::pair<int, int>)>&&);
+//    void set_get_Add(const std::function<bool(PlayerId, std::pair<int, int>, std::pair<int, int>)>&&);
 
 private:
     // 状态节点组成的数组 activePlayer, operation, atomicExecute, 三种状态循环往复
@@ -62,6 +69,12 @@ private:
     int playerNum;
     std::vector<std::pair<PlayerId, std::pair<int, int>>> curPosition;
 
+
+    // 为了能访问到Model层map里面的函数，设计仿函数解决
+//    std::function<bool(PlayerId, int, int)> get_JudgeSolution;
+//    std::function<bool(std::pair<int, int>, std::pair<int, int>)> get_Accessiable;
+//    std::function<bool(PlayerId, std::pair<int, int>, std::pair<int, int>)> get_Remove;
+//    std::function<bool(PlayerId, std::pair<int, int>, std::pair<int, int>)> get_Add;
 };
 
 #endif // STATEMACHINE_H

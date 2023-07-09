@@ -94,7 +94,7 @@ bool StateMachine::SelectPositionCommand()
       case Move:
         // 传什么参数?坐标和方向
         // 调用执行函数
-        if (this->ExecuteMoveCommand(position, direction) == false) return false;
+        if (this->ExecuteMoveCommand(curActivePlayer, position, direction) == false) return false;
         break;
       case PlaceBarrier:
         // 传什么参数?两个点的坐标
@@ -159,8 +159,10 @@ bool StateMachine::RollbackCommand()
     return true;
 }
 // 待实现
-bool StateMachine::ExecuteMoveCommand(std::pair<int, int> position, Direction direction)
+bool StateMachine::ExecuteMoveCommand(PlayerId curActivePlayer, std::pair<int, int> position, Direction direction)
 {
+    // 判断能不能走
+
     return true;
 }
 bool StateMachine::ExecutePlaceBarrierCommand(std::pair<int, int> pos1, std::pair<int, int> pos2)
@@ -171,4 +173,23 @@ bool StateMachine::ExecuteRemoveBarrierCommand(std::pair<int, int> pos1, std::pa
 {
     return true;
 }
+
+
+// 好像这种方式又不大对劲的样子......
+//void StateMachine::set_get_JudgeSolution(const std::function<bool(PlayerId, int, int)>&& func)
+//{
+//    this->get_JudgeSolution = func;
+//}
+//void StateMachine::set_get_Accessiable(const std::function<bool(std::pair<int, int>, std::pair<int, int>)>&& func)
+//{
+//    this->get_Accessiable = func;
+//}
+//void StateMachine::set_get_Remove(const std::function<bool(PlayerId, std::pair<int, int>, std::pair<int, int>)>&& func)
+//{
+//    this->get_Remove = func;
+//}
+//void StateMachine::set_get_Add(const std::function<bool(PlayerId, std::pair<int, int>, std::pair<int, int>)>&& func)
+//{
+//    this->get_Add = func;
+//}
 
