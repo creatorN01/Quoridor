@@ -12,9 +12,9 @@ Map::Map()
             graph_1[i][j].down = ((i+1) == MAPSIZE) ? NoWaytoGo : Passable ;
             graph_1[i][j].left = (j == 0) ? NoWaytoGo : Passable;
             graph_1[i][j].right = ((j+1) == MAPSIZE) ? NoWaytoGo : Passable ;
+            map[i][j] = graph_2[i][j] = graph_1[i][j];
+            visited[i][j] = 0;
         }
-        map[i][j] = graph_2[i][j] = graph_1[i][j];
-        visited[i][j] = 0;
     }
 }
 
