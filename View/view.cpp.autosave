@@ -53,7 +53,7 @@ void View::paintEvent(QPaintEvent *)
     player1->paint(painter, player1->get_pos(), player1->get_isSelected(), 95, 95);
     player2->paint(painter, player2->get_pos(), player2->get_isSelected(), 95, 95);
 
-
+    
 }
 
 

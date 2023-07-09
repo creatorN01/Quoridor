@@ -63,14 +63,15 @@ private:
     // ...
     // 初步觉得用一个vector存，后期如果有不方便的地方，可以再调整，换成map什么的
     std::vector<QSharedPointer<Barrier_ui>> Barrier_ui_List;
-
+    
+    QSharedPointer<Commands> game_status_command; // 游戏状态指令
     QSharedPointer<Commands> first_player_move;
     QSharedPointer<Commands> second_player_move;
     QSharedPointer<Commands> first_player_put;
     QSharedPointer<Commands> second_player_put;
     QSharedPointer<Commands> first_player_break;
     QSharedPointer<Commands> second_player_break;
-
+    QSharedPointer<Commands> move_command; // 游戏状态指令
 
     std::function<QPoint(void)> get_first_player_pos;
     std::function<QPoint(void)> get_second_player_pos;
