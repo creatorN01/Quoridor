@@ -147,7 +147,10 @@ bool Map::Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2)/*move
     }
     return false;
 }
-bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int>point_2)/*set barrier*/
+
+
+/*set barrier and remove edge*/
+bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int>point_2)
 {
     int x_1 = point_1.first;
     int y_1 = point_1.second;
@@ -208,6 +211,9 @@ bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int
     }
     return false;
 }
+
+
+/*remove barrier and add edge*/
 bool Map::Add(PlayerId player_id, std::pair<int,int>point_1 ,std::pair<int,int>point_2)
 {
     int x_1 = point_1.first;
@@ -219,21 +225,21 @@ bool Map::Add(PlayerId player_id, std::pair<int,int>point_1 ,std::pair<int,int>p
         if(y_1 < y_2)/*point_1 | point_2*/
         {
             map[x_1][y_1].right = map[x_2][y_2].left = Passable;
-            if(player_id == PlayerId::FIRST)/*first*/
-            {
+//            if(player_id == PlayerId::FIRST)/*first*/
+//            {
                 graph_2[x_1][y_1].right = graph_2[x_2][y_2].left = Passable;
-            }else{/*second*/
+            //}else{/*second*/
                 graph_1[x_1][y_1].right = graph_1[x_2][y_2].left = Passable;
-            }
+            //}
             return true;
         }else{/*point_2 | point_1*/
             map[x_1][y_1].left = map[x_2][y_2].right = Passable;
-            if(player_id == PlayerId::FIRST)/*first*/
-            {
+//            if(player_id == PlayerId::FIRST)/*first*/
+//            {
                 graph_2[x_1][y_1].left = graph_2[x_2][y_2].right = Passable;
-            }else{/*second*/
+            //}else{/*second*/
                 graph_1[x_1][y_1].left = graph_1[x_2][y_2].right = Passable;
-            }
+            //}
             return true;
         }
     }
@@ -245,12 +251,12 @@ bool Map::Add(PlayerId player_id, std::pair<int,int>point_1 ,std::pair<int,int>p
         if(x_1 < x_2)
         {
             map[x_1][y_1].down = map[x_2][y_2].up = Passable;
-            if(player_id == PlayerId::FIRST)/*first*/
-            {
+//            if(player_id == PlayerId::FIRST)/*first*/
+//            {
                 graph_2[x_1][y_1].down = graph_2[x_2][y_2].up = Passable;
-            }else{/*second*/
+            //}else{/*second*/
                 graph_1[x_1][y_1].down = graph_1[x_2][y_2].up = Passable;
-            }
+            //}
             return true;
         }
         /*  point_2
@@ -258,12 +264,12 @@ bool Map::Add(PlayerId player_id, std::pair<int,int>point_1 ,std::pair<int,int>p
             point_1  */
         else{
             map[x_1][y_1].up = map[x_2][y_2].down = Passable;
-            if(player_id == PlayerId::FIRST)/*first*/
-            {
+//            if(player_id == PlayerId::FIRST)/*first*/
+//            {
                 graph_2[x_1][y_1].up = graph_2[x_2][y_2].down = Passable;
-            }else{/*second*/
+            //}else{/*second*/
                 graph_1[x_1][y_1].up = graph_1[x_2][y_2].down = Passable;
-            }
+            //}
             return true;
         }
     }
