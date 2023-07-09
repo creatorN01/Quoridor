@@ -50,6 +50,8 @@ public:
 
 // public slots:
     void react_game_status_change(const GameStatus &status); // 接收游戏状态改变的信号
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     // ui指针

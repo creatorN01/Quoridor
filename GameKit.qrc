@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>GameKit/1.jpg</file>
+        <file>GameKit/2.jpg</file>
+        <file>GameKit/3.jpg</file>
+        <file>GameKit/4.jpg</file>
+        <file>GameKit/background.jpg</file>
+        <file>GameKit/FIRST_player.png</file>
+        <file>GameKit/SECOND_player.png</file>
+    </qresource>
+</RCC>

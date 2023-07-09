@@ -17,10 +17,10 @@ Barrier_ui::Barrier_ui(QWidget *parent)
 //    if(img_barrier1_row.isNull()) {
 //        img_barrier2_column.load(":/GameKit/img_barrier2_column.jpg");
 //    }
-    img_barrier1_row.load(":/GameKit/barrier1_row.jpg");
-    img_barrier1_column.load(":/GameKit/img_barrier1_column.jpg");
-    img_barrier2_row.load(":/GameKit/img_barrier2_row.jpg");
-    img_barrier2_column.load(":/GameKit/img_barrier2_column.jpg");
+    img_barrier1_row.load(":/GameKit/1.jpg");
+    img_barrier1_column.load(":/GameKit/2.jpg");
+    img_barrier2_row.load(":/GameKit/3.jpg");
+    img_barrier2_column.load(":/GameKit/4.jpg");
 }
 
 void Barrier_ui::paint(QPainter &painter, int width, int height, const QPoint& pos, const PlayerId& id, const BarrierType& type) {
