@@ -18,88 +18,88 @@ Map::Map()
     }
 }
 
-bool Map::Solve(PlayerId player_id, int Curr_X, int Curr_Y)
+bool Map::JudgeSolution(PlayerId player_id, int Curr_X, int Curr_Y)/*Solve*/
 {
     for(int i=0;i<MAPSIZE;i++)
         for(int j=0;j<MAPSIZE;j++)
             visited[i][j] = 0;
-    bool result = JudgeSolution(player_id, Curr_X, Curr_Y);
+    bool result = Solve(player_id, Curr_X, Curr_Y);
     return result;
 }
 
 
 
 
-bool Map::JudgeSolution(PlayerId player_id, int Curr_X, int Curr_Y)
+bool Map::Solve(PlayerId player_id, int Curr_X, int Curr_Y)/*JudgeSolution*/
 {
-    if (Curr_X < 0 || Curr_X >= MAPSIZE || Curr_Y < 0 || Curr_Y >= MAPSIZE)//out of range of map
+    if (Curr_X < 0 || Curr_X >= MAPSIZE || Curr_Y < 0 || Curr_Y >= MAPSIZE)/*out of range of map*/
         return false;
     visited[Curr_X][Curr_Y] = 1;
-    if (player_id == PlayerId::FIRST)//first
+    if (player_id == PlayerId::FIRST)/*first*/
     {
-        if (Curr_X == MAPSIZE - 1)//reach
+        if (Curr_X == 0)/*first player reach top*/
             return true;
         bool tmp = false;
         if ((graph_1[Curr_X][Curr_Y].down == 1) && (visited[Curr_X + 1][Curr_Y] == 0))//go down
         {
             Curr_X++;
-            tmp = JudgeSolution(player_id, Curr_X, Curr_Y);
+            tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X--][Curr_Y] = 0; }
             else return true;
         }
         if (graph_1[Curr_X][Curr_Y].up == 1 && visited[Curr_X - 1][Curr_Y] == 0)//go up
         {
             Curr_X--;
-            tmp = JudgeSolution(player_id, Curr_X, Curr_Y);
+            tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X++][Curr_Y] = 0; }
             else return true;
         }
         if (graph_1[Curr_X][Curr_Y].left == 1 && visited[Curr_X][Curr_Y - 1] == 0)//go left
         {
             Curr_Y--;
-            tmp = JudgeSolution(player_id, Curr_X, Curr_Y);
+            tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X][Curr_Y++] = 0; }
             else return true;
         }
         if (graph_1[Curr_X][Curr_Y].right == 1 && visited[Curr_X][Curr_Y + 1] == 0)//go right
         {
             Curr_Y++;
-            tmp = JudgeSolution(player_id, Curr_X, Curr_Y);
+            tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X][Curr_Y--] = 0; }
             else return true;
         }
         return false;
     }
-    else//second
+    else/*second*/
     {
-        if (Curr_X == 0)//reach
+        if (Curr_X == MAPSIZE - 1)/*second player reach bottom*/
             return true;
         bool tmp = false;
         if (graph_2[Curr_X][Curr_Y].down == 1 && visited[Curr_X + 1][Curr_Y] == 0)//go down
         {
             Curr_X++;
-            tmp = JudgeSolution(player_id, Curr_X, Curr_Y);
+            tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X--][Curr_Y] = 0; }
             else return true;
         }
         if (graph_2[Curr_X][Curr_Y].up == 1 && visited[Curr_X - 1][Curr_Y] == 0)//go up
         {
             Curr_X--;
-            tmp = JudgeSolution(player_id, Curr_X, Curr_Y);
+            tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X++][Curr_Y] = 0; }
             else return true;
         }
         if (graph_2[Curr_X][Curr_Y].left == 1 && visited[Curr_X][Curr_Y - 1] == 0)//go left
         {
             Curr_Y--;
-            tmp = JudgeSolution(player_id, Curr_X, Curr_Y);
+            tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X][Curr_Y++] = 0; }
             else return true;
         }
         if (graph_2[Curr_X][Curr_Y].right == 1 && visited[Curr_X][Curr_Y + 1] == 0)//go right
         {
             Curr_Y++;
-            tmp = JudgeSolution(player_id, Curr_X, Curr_Y);
+            tmp = Solve(player_id, Curr_X, Curr_Y);
             if (tmp == false) { visited[Curr_X][Curr_Y--] = 0; }
             else return true;
         }
