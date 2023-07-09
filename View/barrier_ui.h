@@ -13,8 +13,9 @@ class Barrier_ui : public QWidget
     Q_OBJECT
 public:
     explicit Barrier_ui(QWidget *parent = nullptr);
+    void paint(QPainter &painter, int width, int height, const QPoint& pos, const PlayerId& id, const BarrierType& type);
     void set_pos(const QPoint& pos);
-    void set_playerId(const QPoint& id);
+    void set_playerId(const PlayerId& id);
     void set_type(const BarrierType& type);
     QPoint& get_pos();
     PlayerId& get_playerId();
