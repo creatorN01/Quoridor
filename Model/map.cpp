@@ -209,7 +209,7 @@ bool Map::Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2)/*move
         qDebug() << "y_1 == y_2 && x_1 < x_2";
         qDebug() << "map[" << x_1 << "][" << y_1 << "].down" << map[x_1][y_1].down;
         qDebug() << "map[" << x_2 << "][" << y_2 << "].up" << map[x_2][y_2].up;
-        this->PrintMap();
+        // this->PrintMap();
         if(map[x_1][y_1].down == Accessibility::PASSABLE && map[x_2][y_2].up == Accessibility::PASSABLE) return true;
 
         return false;
@@ -345,7 +345,7 @@ bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int
                 graph_1[x_1][y_1].down = graph_1[x_2][y_2].up = Accessibility::NOWAY;
             }
             qDebug() << "after remove";
-            this->PrintMap();
+            // this->PrintMap();
             return true;
         }
         /*  point_2
@@ -385,7 +385,7 @@ bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int
             graph_1[y_1][x_1].right = graph_1[y_2][x_2].left = Accessibility::PASSABLE;
 
             qDebug() << "after add";
-            this->PrintMap();
+            //this->PrintMap();
 
             return true;
         }
@@ -395,7 +395,7 @@ bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int
             graph_1[y_1][x_1].left = graph_1[y_2][x_2].right = Accessibility::PASSABLE;
 
             qDebug() << "after add";
-            this->PrintMap();
+            //this->PrintMap();
 
             return true;
         }
@@ -412,7 +412,7 @@ bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int
             graph_1[y_1][x_1].down = graph_1[y_2][x_2].up = Accessibility::PASSABLE;
 
             qDebug() << "after add";
-            this->PrintMap();
+           // this->PrintMap();
 
             return true;
         }
@@ -425,7 +425,7 @@ bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int
             graph_1[y_1][x_1].up = graph_1[y_2][x_2].down = Accessibility::PASSABLE;
 
             qDebug() << "after add";
-            this->PrintMap();
+            //this->PrintMap();
 
             return true;
         }

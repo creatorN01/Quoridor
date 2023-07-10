@@ -16,6 +16,7 @@ View::View(QWidget *parent)
     player1 = QSharedPointer<Player_ui>::create(PlayerId::FIRST, this);
     player2 = QSharedPointer<Player_ui>::create(PlayerId::SECOND, this);
     map = QSharedPointer<Map_ui>::create(this);
+    Barrier_ui_List = QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>>::create();
     QPoint point(0, 0);
     arrow = QSharedPointer<Arrow_ui>::create(point, false, this);
     tempBarrier = QSharedPointer<Barrier_ui>::create(this);
@@ -93,7 +94,8 @@ void View::paintEvent(QPaintEvent *event)
     }
 
     // 画 Barrier_ui_List
-    for (auto barrier_ : Barrier_ui_List)
+    // qDebug() << "Barrier_ui_List.data()  size: " << (*(Barrier_ui_List.data())).size();//vector.size
+    for (auto barrier_ : *(Barrier_ui_List.data()))
     {
         barrier_->paint(painter);
     }
@@ -284,8 +286,8 @@ void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction)
 
 void View::PlaceBarrier_ui()
 {
-    Barrier_ui_List.push_back(tempBarrier);
-    tempBarrier->set_fixed(true);
+    Barrier_ui_List.data()->push_back(tempBarrier);
+    // tempBarrier->set_fixed(true);
     tempBarrier->set_needToShow(false);
     // 文字提示变更（待定）
     update();

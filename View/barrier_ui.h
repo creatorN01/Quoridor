@@ -7,12 +7,16 @@
 #include <QWidget>
 #include <QPainter>
 #include "Common/common.h"
-
+#include <QDebug>
 class Barrier_ui : public QWidget
 {
     Q_OBJECT
 public:
     explicit Barrier_ui(QWidget *parent = nullptr);
+
+    ~Barrier_ui(){qDebug() << "析构------------------------------------------------------";}
+
+
     void paint(QPainter &painter);
     void set_pos(const QPoint& pos);
     void set_playerId(const PlayerId& id);

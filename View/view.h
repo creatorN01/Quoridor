@@ -85,7 +85,7 @@ private:
     TextPrompt* info;
     // ...
     // 初步觉得用一个vector存，后期如果有不方便的地方，可以再调整，换成map什么的
-    std::vector<QSharedPointer<Barrier_ui>> Barrier_ui_List;
+    QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>> Barrier_ui_List;
 
     QTimer* timer;
     // int curFrame; // 用于绘制地图，记录帧数
