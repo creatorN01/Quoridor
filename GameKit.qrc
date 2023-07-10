@@ -7,5 +7,9 @@
         <file>GameKit/background.jpg</file>
         <file>GameKit/FIRST_player.png</file>
         <file>GameKit/SECOND_player.png</file>
+        <file>GameKit/arrow_down.png</file>
+        <file>GameKit/arrow_left.png</file>
+        <file>GameKit/arrow_right.png</file>
+        <file>GameKit/arrow_up.png</file>
     </qresource>
 </RCC>

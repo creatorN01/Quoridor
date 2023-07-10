@@ -13,13 +13,16 @@ class Barrier_ui : public QWidget
     Q_OBJECT
 public:
     explicit Barrier_ui(QWidget *parent = nullptr);
-    void paint(QPainter &painter, int width, int height, const QPoint& pos, const PlayerId& id, const BarrierType& type);
+    void paint(QPainter &painter);
     void set_pos(const QPoint& pos);
     void set_playerId(const PlayerId& id);
     void set_type(const BarrierType& type);
+    void set_needToShow(const bool need){this->ifNeedtoShow = need;}
     QPoint& get_pos();
     PlayerId& get_playerId();
     BarrierType& get_type();
+    bool getIfNeedToShow();
+
 private:
     // 四种图像作为静态成员存储更合适一些，所有的对象共用一份
     // 不知道会不会在显示的时候出bug...实在不行，再改
@@ -34,6 +37,8 @@ private:
     PlayerId playerId;
     // 横or竖
     BarrierType type;
+
+    bool ifNeedtoShow = false;
 };
 // 记得给静态成员赋值~
 
