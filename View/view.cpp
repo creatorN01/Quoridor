@@ -43,8 +43,9 @@ void View::initUI()
     QPoint point2(700, 0);
     player1->set_pos(point1);
     player2->set_pos(point2);
-
-
+    qDebug() << "after initUI";
+    qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
+    qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
     // 强制重绘
     update();
 }
@@ -171,7 +172,7 @@ void View::ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type)
     update();
 }
 
-void View::GetDirectionFromKeyboard()
+Direction View::GetDirectionFromKeyboard()
 {
     // 创建一个事件循环
     QEventLoop loop;
@@ -183,6 +184,52 @@ void View::GetDirectionFromKeyboard()
     loop.exec();
     // 接收到键盘信号
     qDebug() << "收到键盘信号";
-    return;
+    return this->arrow->getDirection();
+}
+
+void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction) {
+    qDebug() << "player1: " << player1->x() << "," << player1->y();
+    qDebug() << "player2: " << player2->x() << "," << player2->y();
+
+    if(activePlayer == FIRST) {
+        if(direction == Up) {
+            QPoint point(player1->get_pos().x(), player1->get_pos().y() - 100);
+            player1->set_pos(point);
+        }
+        else if(direction == Down) {
+            QPoint point(player1->get_pos().x(), player1->get_pos().y() + 100);
+            player1->set_pos(point);
+        }
+        else if(direction == Left) {
+            QPoint point(player1->get_pos().x() - 100, player1->get_pos().y());
+            player1->set_pos(point);
+        }
+        else if(direction == Right) {
+            QPoint point(player1->get_pos().x() + 100, player1->get_pos().y());
+            player1->set_pos(point);
+        }
+    }
+    else if(activePlayer == SECOND) {
+        if(direction == Up) {
+            QPoint point(player2->get_pos().x(), player2->get_pos().y() - 100);
+            player2->set_pos(point);
+        }
+        else if(direction == Down) {
+            QPoint point(player2->get_pos().x(), player2->get_pos().y() + 100);
+            player2->set_pos(point);
+        }
+        else if(direction == Left) {
+            QPoint point(player2->get_pos().x() - 100, player2->get_pos().y());
+            player2->set_pos(point);
+        }
+        else if(direction == Right) {
+            QPoint point(player2->get_pos().x() + 100, player2->get_pos().y());
+            player2->set_pos(point);
+        }
+    }
+    this->arrow->setIfNeedToShow(false);
+    qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
+    qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
+    update();
 }
 

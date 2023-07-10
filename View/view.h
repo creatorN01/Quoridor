@@ -53,7 +53,8 @@ public:
     QPoint CorrectBarrierPosition(QPoint point);
     void ShowArrowAround(QPoint point);
     void ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type);
-    void GetDirectionFromKeyboard();
+    Direction GetDirectionFromKeyboard();
+    void MoveActivePlayerPos(PlayerId activePlayer, Direction direction);
 signals:
     void mySignal(QPoint pos);
     void keyPressSignal(Direction direction);

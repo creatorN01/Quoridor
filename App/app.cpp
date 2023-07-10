@@ -27,17 +27,7 @@ void App::InitGameEnv()
   view->initUI();
 
   QObject::connect(view.data(), SIGNAL(mySignal(QPoint)), this, SLOT(When_Clicked(QPoint)));
-  // 利用lambda表达式对仿函数进行绑定
-  // 这里只需要绑定ViewModel和View的函数，不需要处理信号和槽
-  // 信号和槽的绑定放在view层来做
-  // 信号：
-  // 鼠标的点击
-  // 槽函数：
-  // 状态转移命令：
-  // SetActivePlayerCommand, SelectPositionCommand
-  // SelectOperationCommand, RollbackCommand
-  // 执行命令：
-  // ExecuteMoveCommand, ExecutePlaceBarrierCommand, ExecuteRemoveBarrierCommand
+
 }
 void App::Run()
 {
@@ -61,6 +51,8 @@ void App::When_Clicked(QPoint clickedPosition)
   qDebug() << "进入槽函数";
   // qDebug() << "When_clicked";
   // 数据准备
+  // 把map取出来
+  auto Map_ = model->GetMapReference();
   // 拿到状态机的状态
   auto stateMachine = view_model->GetStateMachine();
   auto state = stateMachine->GetCurState();
@@ -74,10 +66,21 @@ void App::When_Clicked(QPoint clickedPosition)
   auto curOperationNode = static_cast<OperationStateNode *>(tran2);
   auto curOperation = curOperationNode->GetOperationType();
 
+  auto tran3 = nodeList[AtomicExecute].get();
+  auto curAtomicExecuteNode = static_cast<AtomicExecuteStateNode *>(tran3);
+  auto execDirection = curAtomicExecuteNode->GetDirection();
+  auto execPos1 = curAtomicExecuteNode->GetPosition1();
+  auto execPos2 = curAtomicExecuteNode->GetPosition2();
+
+
   // PlaceBarrier状态下的规约点
   QPoint correctPoint;
   // 移动状态下的规约点
   QPoint correctPointMove;
+  Direction keyBoardDirection;
+  std::pair<int, int> pos1;
+  std::pair<int, int> pos2;
+
   switch (state)
   {
   case ActivePlayer:
@@ -114,9 +117,34 @@ void App::When_Clicked(QPoint clickedPosition)
         qDebug() << "correctPointMove.setX" << correctPointMove.x();
         view.data()->ShowArrowAround(correctPointMove);
         // 接着用户需要在“上下左右”键中选择一个按下
-        view.data()->GetDirectionFromKeyboard();
+        keyBoardDirection = view.data()->GetDirectionFromKeyboard();
         // 设定执行的数据，调整状态机
-
+        qDebug() << "keyBoardDirection = " << keyBoardDirection;
+        pos1.first = correctPointMove.y() / 100;
+        pos1.second = (correctPointMove.x() - 300) / 100;
+        switch (keyBoardDirection)
+        {
+          case Up:
+            pos2.first = pos1.first;
+            pos2.second = pos1.second - 1;
+            break;
+          case Down:
+            pos2.first = pos1.first;
+            pos2.second = pos1.second + 1;
+            break;
+          case Left:
+            pos2.first = pos1.first - 1;
+            pos2.second = pos1.second;
+            break;
+          case Right:
+            pos2.first = pos1.first + 1;
+            pos2.second = pos1.second;
+            break;
+        }
+        stateMachine->SetExecutionInfo(keyBoardDirection, pos1, pos2);
+        stateMachine->SelectPositionCommand();
+        // 递归调用，这时候就去到AtomicExecute了
+        When_Clicked(clickedPosition);
         break;
       case PlaceBarrier:
         qDebug() << "用户要PlaceBarrier" << clickedPosition;
@@ -132,7 +160,33 @@ void App::When_Clicked(QPoint clickedPosition)
 
     break;
   case AtomicExecute:
-    qDebug() << "NOT";
+    qDebug() << "AtomicExecute";
+    // 根据OperationType进行分支：
+    switch (curOperation)
+    {
+      case Move:
+        // 判断能不能走
+        if (Map_.Accessible(execPos1, execPos2))
+        {
+            // 修改model层的数据——无
+
+            // 修改viewModel
+            stateMachine->SetPosition(curActivePlayer, execPos2);
+            // 修改view
+            view->MoveActivePlayerPos(curActivePlayer, execDirection);
+
+        }
+        // 设置状态机，进入后手的ActivePlayer状态
+        stateMachine->SetActivePlayerCommand();
+        break;
+      case PlaceBarrier:
+        qDebug() << "NOT";
+        break;
+      case RemoveBarrier:
+        qDebug() << "NOT";
+        break;
+    }
+
     break;
   }
 }
