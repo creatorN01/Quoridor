@@ -48,7 +48,8 @@ enum BarrierType
 
 enum GameStatus
 {
-    PLAYING = 0,
+    INIT = 0,
+    PLAYING,
     FIRST_WIN,
     SECOND_WIN
 };

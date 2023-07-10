@@ -7,6 +7,8 @@
 #include <QProcess>
 #include <QPainter>
 
+int counttt = 0;
+
 View::View(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::View)
@@ -65,6 +67,7 @@ void View::initUI()
 
 void View::paintEvent(QPaintEvent *event)
 {
+    qDebug() << "yiciyiciyiciyici    " << counttt++;
     Q_UNUSED(event);
     QPainter painter(this);
 
