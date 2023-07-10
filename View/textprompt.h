@@ -23,16 +23,27 @@ class TextPrompt : public QWidget
 
 public:
     explicit TextPrompt(QWidget *parent = nullptr);
-    void setPlayerName(const QString& playerName);
-    void setRemainingBarriers(int count);
-    void setMovePrompt(bool isMyMove);
-    void setMoveCount(int count);
+    void setPlayerName();
+    void setRemainingBarriers(int count1, int count2);
+    void setMovePrompt(PlayerId player);
+    void setMoveCount(int count1, int count2);
+    void get_count_barrier(int count1, int count2);
+    void get_count_round(int count1, int count2);
+    void get_play_id(PlayerId player);
+    void paint();
 
 private:
-    QLabel* playerNameLabel; // 用于显示玩家名称的标签
-    QLabel* remainingBarriersLabel; // 用于显示剩余可放置障碍物数的标签
+    QLabel* playerNameLabel_1; // 用于显示玩家名称的标签
+    QLabel* playerNameLabel_2; // 用于显示玩家名称的标签
+    QLabel* remainingBarriersLabel_1; // 用于显示剩余可放置障碍物数的标签
+    QLabel* remainingBarriersLabel_2; // 用于显示剩余可放置障碍物数的标签
+    QLabel* moveCountLabel_1; // 用于显示移动步数的标签
+    QLabel* moveCountLabel_2; // 用于显示移动步数的标签
     QLabel* movePromptLabel; // 用于显示"My move"提示的标签
-    QLabel* moveCountLabel; // 用于显示移动步数的标签
+
+    int count_barrier_1 = 0, count_barrier_2 = 0;
+    int count_round_1 = 0, count_round_2 = 0;
+    PlayerId player_id = FIRST;
 
 signals:
 

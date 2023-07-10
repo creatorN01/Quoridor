@@ -11,5 +11,7 @@
         <file>GameKit/arrow_left.png</file>
         <file>GameKit/arrow_right.png</file>
         <file>GameKit/arrow_up.png</file>
+        <file>GameKit/t1.jpg</file>
+        <file>GameKit/t2.jpg</file>
     </qresource>
 </RCC>

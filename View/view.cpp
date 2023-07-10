@@ -20,6 +20,7 @@ View::View(QWidget *parent)
     QPoint point(0,0);
     arrow = QSharedPointer<Arrow_ui>::create(point, false, this);
     tempBarrier = QSharedPointer<Barrier_ui>::create(this);
+    info = new TextPrompt(this);
     // const int GAP = 1; // 每隔0.001秒触发一次槽函数move
     // timer->start(GAP);
     // connect(timer, SIGNAL(timeout()), this, SLOT(move()));
@@ -46,6 +47,18 @@ void View::initUI()
     qDebug() << "after initUI";
     qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
     qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
+
+    // 创建布局管理器
+    QVBoxLayout *layout = new QVBoxLayout();
+
+    // 将 TextPrompt 添加到布局中
+    layout->addWidget(info);
+
+    // 将布局设置给主窗口
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setLayout(layout);
+    setCentralWidget(centralWidget);
+
     // 强制重绘
     update();
 }
@@ -78,6 +91,7 @@ void View::paintEvent(QPaintEvent *event)
         tempBarrier->paint(painter);
     }
 
+    info->paint();
 
 }
 

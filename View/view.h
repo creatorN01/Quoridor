@@ -80,7 +80,7 @@ private:
     QSharedPointer<Arrow_ui> arrow;
     QSharedPointer<Barrier_ui> tempBarrier;
     // 一些文字提示（待完成）
-    QSharedPointer<TextPrompt> PlayerName;
+    TextPrompt* info;
     // ...
     // 初步觉得用一个vector存，后期如果有不方便的地方，可以再调整，换成map什么的
     std::vector<QSharedPointer<Barrier_ui>> Barrier_ui_List;

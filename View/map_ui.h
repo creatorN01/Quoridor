@@ -16,7 +16,8 @@ public:
     void paint(QPainter &,int width, int height);
 private:
     QPixmap img_map;
-
+    QPixmap t1;
+    QPixmap t2;
 
 };
 
