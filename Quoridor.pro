@@ -55,3 +55,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     GameKit.qrc
 
+OBJECTS_DIR  = tmp
+MOC_DIR      = tmp
