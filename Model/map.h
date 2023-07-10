@@ -12,7 +12,7 @@ class Map
 {
 public:
     Map();
-    bool Solve(PlayerId player_id, int Curr_X, int Curr_Y);//only in judge solution
+    bool Solve(PlayerId player_id, std::pair<int,int>point);//only in judge solution
     bool JudgeSolution(PlayerId player_id, int Curr_X, int Curr_Y);
     bool Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2);
     bool Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int>point_2);
