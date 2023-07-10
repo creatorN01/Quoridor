@@ -51,7 +51,7 @@ public:
 
     // 接口
     void SetPlayerNum(int num);
-    void SetPosition();
+    void SetPosition(PlayerId activePlayer, std::pair<int, int> pos);
     State GetCurState();
     std::vector<QSharedPointer<AbstractStateNode>> GetNodeList();
 
@@ -68,8 +68,8 @@ private:
     State curNodeIndex;
     // 玩家个数和坐标
     int playerNum;
-    std::vector<std::pair<PlayerId, std::pair<int, int>>> curPosition;
-
+    // std::vector<std::pair<PlayerId, std::pair<int, int>>> curPosition;
+    std::pair<int, int> curPosition[PLAYERNUM];
 
     // 为了能访问到Model层map里面的函数，设计仿函数解决
 //    std::function<bool(PlayerId, int, int)> get_JudgeSolution;

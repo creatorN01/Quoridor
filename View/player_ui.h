@@ -15,8 +15,8 @@ class Player_ui : public QWidget
 public:
     explicit Player_ui(const PlayerId id, QWidget *parent = nullptr);
     void paint(QPainter &painter, const QPoint pos, int width, int height);
-    void set_pos(const QPoint& pos);
-    void set_selected(const bool& isSelected);
+    void set_pos(const QPoint pos);
+    void set_selected(const bool isSelected);
     void set_playerId(const PlayerId id);
     PlayerId& get_id();
     bool& get_isSelected();

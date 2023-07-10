@@ -27,12 +27,15 @@ void Player_ui::paint(QPainter &painter, const QPoint pos, int width, int height
     painter.drawPixmap(pos.x(), pos.y(), img_player.scaled(width, height, Qt::KeepAspectRatio));
 }
 
-void Player_ui::set_pos(const QPoint &pos)
+void Player_ui::set_pos(const QPoint pos)
 {
+    qDebug() << "pos" << pos.x() << "," <<  pos.y();
+    qDebug() << "before set_pos" << this->get_pos().x() << "," <<  this->get_pos().y();
     this->pos = pos;
+    qDebug() << "after set_pos" << this->get_pos().x() << "," <<  this->get_pos().y();
 }
 
-void Player_ui::set_selected(const bool &isSelected)
+void Player_ui::set_selected(const bool isSelected)
 {
     this->isSelected = isSelected;
 }
