@@ -18,7 +18,7 @@ Map::Map()
     }
 }
 
-bool Map::JudgeSolution(PlayerId player_id, int Curr_X, int Curr_Y)/*Solve*/
+bool Map::JudgeSolution(PlayerId player_id, int Curr_X, int Curr_Y)
 {
     for(int i=0;i<MAPSIZE;i++)
         for(int j=0;j<MAPSIZE;j++)
@@ -30,7 +30,7 @@ bool Map::JudgeSolution(PlayerId player_id, int Curr_X, int Curr_Y)/*Solve*/
 
 
 
-bool Map::Solve(PlayerId player_id, int Curr_X, int Curr_Y)/*JudgeSolution*/
+bool Map::Solve(PlayerId player_id, int Curr_X, int Curr_Y)
 {
     if (Curr_X < 0 || Curr_X >= MAPSIZE || Curr_Y < 0 || Curr_Y >= MAPSIZE)/*out of range of map*/
         return false;
@@ -113,6 +113,10 @@ bool Map::Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2)/*move
     int y_1 = point_1.second;
     int x_2 = point_2.first;
     int y_2 = point_2.second;
+    if(x_1 < 0 || x_1 >= MAPSIZE || y_1 < 0 || y_1 >= MAPSIZE) /*point_1 out of range*/
+        return false;
+    if(x_2 < 0 || x_2 >= MAPSIZE || y_2 < 0 || y_2 >= MAPSIZE) /*point_2 out of range*/
+        return false;
 
     /*p_2 p_1*/
     if(x_1 == x_2 && y_1 > y_2)
@@ -145,7 +149,7 @@ bool Map::Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2)/*move
         if(map[x_1][y_1].down == Accessibility::PASSABLE && map[x_2][y_2].up == Accessibility::PASSABLE) return true;
         return false;
     }
-    return false;
+    return false; /*other exceptions*/
 }
 
 
