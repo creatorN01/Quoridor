@@ -53,6 +53,7 @@ public:
     void SetPlayerNum(int num);
     void SetPosition();
     State GetCurState();
+    std::vector<QSharedPointer<AbstractStateNode>> GetNodeList();
 
 //    // 绑定仿函数的方法
 //    void set_get_JudgeSolution(const std::function<bool(PlayerId, int, int)>&&);
