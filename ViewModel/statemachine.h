@@ -44,6 +44,7 @@ public:
     bool RollbackCommand();
 
     // 执行命令
+    void SetPlaceBarrierExecInfo(BarrierType type_, std::pair<int, int> pos1, std::pair<int, int> pos2, std::pair<int, int> pos3, std::pair<int, int> pos4);
     void SetExecutionInfo(Direction direction, std::pair<int, int> pos1, std::pair<int, int> pos2);
     bool ExecuteMoveCommand(PlayerId curActivePlayer, std::pair<int, int> position, Direction direction);
     bool ExecutePlaceBarrierCommand(std::pair<int, int> pos1, std::pair<int, int> pos2);

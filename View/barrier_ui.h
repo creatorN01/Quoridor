@@ -18,6 +18,7 @@ public:
     void set_playerId(const PlayerId& id);
     void set_type(const BarrierType& type);
     void set_needToShow(const bool need){this->ifNeedtoShow = need;}
+    void set_fixed(const bool fixed){this->ifFixed = fixed;}
     QPoint& get_pos();
     PlayerId& get_playerId();
     BarrierType& get_type();
@@ -39,7 +40,7 @@ private:
     BarrierType type;
 
     bool ifNeedtoShow = false;
+    bool ifFixed = false;
 };
-// 记得给静态成员赋值~
 
 #endif // BARRIER_UI_H

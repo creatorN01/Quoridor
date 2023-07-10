@@ -30,3 +30,15 @@ void AtomicExecuteStateNode::SetPosition(std::pair<int, int> pos1_, std::pair<in
     this->pos2 = pos2_;
 }
 
+void AtomicExecuteStateNode::SetPlaceBarrierPos(std::pair<int, int> pos1_, std::pair<int, int> pos2_, std::pair<int, int> pos3_, std::pair<int, int> pos4_)
+{
+    this->PlacePos1 = pos1_;
+    this->PlacePos2 = pos2_;
+    this->PlacePos3 = pos3_;
+    this->PlacePos4 = pos4_;
+}
+void AtomicExecuteStateNode::SetBarrierType(BarrierType type_)
+{
+    this->barrierType = type_;
+}
+

@@ -119,6 +119,9 @@ void View::keyPressEvent(QKeyEvent *event)
       case Qt::Key_Right:
         emit keyPressSignal(Right);
         break;
+      case Qt::Key_Space:
+        emit placeBarrierSignal();
+        break;
     }
 }
 
@@ -161,15 +164,23 @@ void View::ShowArrowAround(QPoint point)
     update();
 }
 
-void View::ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type)
+BarrierType View::ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type)
 {
     qDebug() << "ShowPossibleBarrier调用";
     this->tempBarrier->set_playerId(id);
     this->tempBarrier->set_pos(pos);
     this->tempBarrier->set_needToShow(true);
     this->tempBarrier->set_type(type);
-
     update();
+
+    // 故技重施
+    QEventLoop loop;
+    QObject::connect(this, SIGNAL(placeBarrierSignal()), tempBarrier.data(), SLOT(set_fixed(true)));
+    QObject::connect(this, SIGNAL(placeBarrierSignal()), &loop, SLOT(quit()));
+
+    loop.exec();
+    qDebug() << "收到空格信号";
+    return this->tempBarrier->get_type();
 }
 
 Direction View::GetDirectionFromKeyboard()

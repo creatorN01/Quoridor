@@ -80,6 +80,11 @@ void App::When_Clicked(QPoint clickedPosition)
   Direction keyBoardDirection;
   std::pair<int, int> pos1;
   std::pair<int, int> pos2;
+  BarrierType barrierTypePlaced;
+  std::pair<int, int> pos1_;
+  std::pair<int, int> pos2_;
+  std::pair<int, int> pos3_;
+  std::pair<int, int> pos4_;
 
   switch (state)
   {
@@ -120,8 +125,8 @@ void App::When_Clicked(QPoint clickedPosition)
         keyBoardDirection = view.data()->GetDirectionFromKeyboard();
         // 设定执行的数据，调整状态机
         qDebug() << "keyBoardDirection = " << keyBoardDirection;
-        pos1.first = correctPointMove.y() / 100;
-        pos1.second = (correctPointMove.x() - 300) / 100;
+        pos1.first = (correctPointMove.x() - 300) / 100;
+        pos1.second = correctPointMove.y() / 100;
         switch (keyBoardDirection)
         {
           case Up:
@@ -152,7 +157,20 @@ void App::When_Clicked(QPoint clickedPosition)
         correctPoint = view.data()->CorrectBarrierPosition(clickedPosition);
         qDebug() << "修正坐标" << correctPoint;
         // 调用view里面的ShowPossibleBarrier，会在里面
-        view.data()->ShowPossibleBarrier(curActivePlayer, correctPoint, BarrierType::horizontal);
+        barrierTypePlaced = view.data()->ShowPossibleBarrier(curActivePlayer, correctPoint, BarrierType::horizontal);
+        // 设定执行的数据，调整状态机
+        pos4_.first = (correctPoint.x() - 300) / 100;
+        pos4_.second = correctPoint.y() / 100;
+        pos1_.first = pos4_.first - 1;
+        pos1_.second = pos4_.second - 1;
+        pos2_.first = pos4_.first;
+        pos2_.second = pos4_.second - 1;
+        pos3_.first = pos3_.first - 1;
+        pos3_.second = pos3_.second;
+        stateMachine->SetPlaceBarrierExecInfo(barrierTypePlaced, pos1_, pos2_, pos3_, pos4_);
+        stateMachine->SelectPositionCommand();
+        // 递归调用，这时候就去到AtomicExecute了
+        When_Clicked(clickedPosition);
         break;
       case RemoveBarrier:
         break;
@@ -165,6 +183,7 @@ void App::When_Clicked(QPoint clickedPosition)
     switch (curOperation)
     {
       case Move:
+        qDebug() << "ExecuteMove";
         // 判断能不能走
         if (Map_.Accessible(execPos1, execPos2))
         {
@@ -180,7 +199,14 @@ void App::When_Clicked(QPoint clickedPosition)
         stateMachine->SetActivePlayerCommand();
         break;
       case PlaceBarrier:
-        qDebug() << "NOT";
+        qDebug() << "ExecutePlaceBarrier";
+        // 先修改model层的数据（waiting）
+        // 再修改viewModel层的数据————无
+        // 最后修改view层的数据（waiting）
+        // view要改什么东西？画Barrier、文字提示的更新、vector<> Barrier_ui_List
+
+        // 设置状态机，进入后手的ActivePlayer状态
+        stateMachine->SetActivePlayerCommand();
         break;
       case RemoveBarrier:
         qDebug() << "NOT";
