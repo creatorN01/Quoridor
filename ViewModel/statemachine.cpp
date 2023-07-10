@@ -45,6 +45,11 @@ State StateMachine::GetCurState()
     return this->curNodeIndex;
 }
 
+std::vector<QSharedPointer<AbstractStateNode>> StateMachine::GetNodeList()
+{
+    return this->nodeList;
+}
+
 bool StateMachine::SetActivePlayerCommand()
 {
     this->curNodeIndex = ActivePlayer;

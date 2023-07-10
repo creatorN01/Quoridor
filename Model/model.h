@@ -6,8 +6,8 @@ class Model
 public:
     Model();
     Map GetMap();
-    Map& GetMapReference();
-    void test();//only demo
+    Map &GetMapReference();
+    void test(); // only demo
 private:
     Map WholeMap;
 };

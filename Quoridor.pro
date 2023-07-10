@@ -12,6 +12,7 @@ SOURCES += \
     App/app.cpp \
     Model/map.cpp \
     Model/model.cpp \
+    View/arrow_ui.cpp \
     View/barrier_ui.cpp \
     View/map_ui.cpp \
     View/player_ui.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     Common/common.h \
     Model/map.h \
     Model/model.h \
+    View/arrow_ui.h \
     View/barrier_ui.h \
     View/map_ui.h \
     View/player_ui.h \

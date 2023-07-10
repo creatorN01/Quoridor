@@ -10,6 +10,7 @@
 #include "View/player_ui.h"
 #include "View/map_ui.h"
 #include "View/textprompt.h"
+#include "View/arrow_ui.h"
 #include <QTimer>
 #include "QMouseEvent"
 
@@ -48,10 +49,15 @@ public:
 
 
     void initUI();                      // 初始化绘制
-    // void mousePressEvent(QMouseEvent *event) override; // 鼠标点击时间
-
+    bool ClickedInMap(QPoint point);
+    bool ClickedInPlayer(PlayerId activePlayer, QPoint point);
+    QPoint CorrectBarrierPosition(QPoint point);
+    void ShowArrowAround(QPoint point);
+    void ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type);
+    void GetDirectionFromKeyboard();
 signals:
     void mySignal(QPoint pos);
+    void keyPressSignal(Direction direction);
 
 // public slots:
     void react_game_status_change(const GameStatus &status); // 接收游戏状态改变的信号
@@ -60,6 +66,8 @@ signals:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     // ui指针
@@ -68,6 +76,8 @@ private:
     QSharedPointer<Map_ui> map;
     QSharedPointer<Player_ui> player1;
     QSharedPointer<Player_ui> player2;
+    QSharedPointer<Arrow_ui> arrow;
+    QSharedPointer<Barrier_ui> tempBarrier;
     // 一些文字提示（待完成）
     QSharedPointer<TextPrompt> PlayerName;
     // ...
@@ -77,6 +87,8 @@ private:
     QTimer* timer;
     // int curFrame; // 用于绘制地图，记录帧数
     GameStatus game_status; // 游戏状态
+
+
 
 
 

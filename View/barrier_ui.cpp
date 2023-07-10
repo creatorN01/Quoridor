@@ -17,27 +17,33 @@ Barrier_ui::Barrier_ui(QWidget *parent)
 //    if(img_barrier1_row.isNull()) {
 //        img_barrier2_column.load(":/GameKit/img_barrier2_column.jpg");
 //    }
-    img_barrier1_row.load(":/GameKit/1.jpg");
-    img_barrier1_column.load(":/GameKit/2.jpg");
-    img_barrier2_row.load(":/GameKit/3.jpg");
-    img_barrier2_column.load(":/GameKit/4.jpg");
+    img_barrier1_row.load("://images//GameKit//1.jpg");
+    img_barrier1_column.load("://images//GameKit//2.jpg");
+    img_barrier2_row.load("://images//GameKit//3.jpg");
+    img_barrier2_column.load("://images//GameKit//4.jpg");
 }
 
-void Barrier_ui::paint(QPainter &painter, int width, int height, const QPoint& pos, const PlayerId& id, const BarrierType& type) {
+void Barrier_ui::paint(QPainter &painter) {
+    const int width = 200;
+    const int height = 20;
+    QPoint pos = this->get_pos();
+    PlayerId id = this->get_playerId();
+    auto type = this->get_type();
+//    int correctX = pos.x()
     if(id == FIRST) {
-        if(type == horizontal){
-            painter.drawPixmap(pos.x(), pos.y(), img_barrier1_row.scaled(width, height, Qt::KeepAspectRatio));
+        if(type == horizontal){//横
+            painter.drawPixmap(pos.x()-100, pos.y()-10, img_barrier1_row.scaled(width, height, Qt::KeepAspectRatio));
         }
         else {
-            painter.drawPixmap(pos.x(), pos.y(), img_barrier1_column.scaled(width, height, Qt::KeepAspectRatio));
+            painter.drawPixmap(pos.x()-10, pos.y()-100, img_barrier1_column.scaled(height, width, Qt::KeepAspectRatio));
         }
     }
     else {
         if(type == horizontal) {
-            painter.drawPixmap(pos.x(), pos.y(), img_barrier2_row.scaled(width, height, Qt::KeepAspectRatio));
+            painter.drawPixmap(pos.x()-100, pos.y()-10, img_barrier2_row.scaled(width, height, Qt::KeepAspectRatio));
         }
         else {
-            painter.drawPixmap(pos.x(), pos.y(), img_barrier2_column.scaled(width, height, Qt::KeepAspectRatio));
+            painter.drawPixmap(pos.x()-10, pos.y()-100, img_barrier2_column.scaled(height, width, Qt::KeepAspectRatio));
         }
     }
 }
@@ -64,4 +70,9 @@ PlayerId& Barrier_ui::get_playerId() {
 
 BarrierType& Barrier_ui::get_type() {
     return this->type;
+}
+
+bool Barrier_ui::getIfNeedToShow()
+{
+    return this->ifNeedtoShow;
 }

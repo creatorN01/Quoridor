@@ -2,6 +2,12 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+enum Accessibility
+{
+    PASSABLE = 1,
+    NOWAY = -1
+};
+
 enum PlayerId
 {
     FIRST = 0,
@@ -42,8 +48,7 @@ enum BarrierType
 
 enum GameStatus
 {
-    INIT = 0,
-    PLAYING,
+    PLAYING = 0,
     FIRST_WIN,
     SECOND_WIN
 };

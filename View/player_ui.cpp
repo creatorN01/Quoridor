@@ -40,6 +40,7 @@ void Player_ui::paint(QPainter &painter, const QPoint pos, int width, int height
     //        painter.drawPixmap(pos.x(), pos.y(), img_select.scaled(width, height, Qt::KeepAspectRatio));
 
     //    }
+    qDebug() << "playerW" << width << "playerH" << height;
     painter.drawPixmap(pos.x(), pos.y(), img_player.scaled(width, height, Qt::KeepAspectRatio));
 
     if (isSelected) {
