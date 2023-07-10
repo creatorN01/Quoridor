@@ -3,44 +3,92 @@
 TextPrompt::TextPrompt(QWidget *parent) : QWidget(parent)
 {
     // 创建标签
-    playerNameLabel = new QLabel(this);
-    remainingBarriersLabel = new QLabel(this);
+    playerNameLabel_1 = new QLabel(this);
+    playerNameLabel_2 = new QLabel(this);
+    remainingBarriersLabel_1 = new QLabel(this);
+    remainingBarriersLabel_2 = new QLabel(this);
+    moveCountLabel_1 = new QLabel(this);
+    moveCountLabel_2 = new QLabel(this);
     movePromptLabel = new QLabel(this);
-    moveCountLabel = new QLabel(this);
 
     // 设置标签的位置
-    playerNameLabel->setGeometry(10, 10, 200, 20);
-    remainingBarriersLabel->setGeometry(10, 40, 200, 20);
-    movePromptLabel->setGeometry(10, 70, 200, 20);
-    moveCountLabel->setGeometry(10, 100, 200, 20);
+    playerNameLabel_2->setGeometry(100, 250, 100, 50);
+    remainingBarriersLabel_2->setGeometry(100, 300, 150, 50);
+    moveCountLabel_2->setGeometry(100, 350, 150, 50);
+
+    playerNameLabel_1->setGeometry(100, 600, 100, 50);
+    remainingBarriersLabel_1->setGeometry(100, 650, 150, 50);
+    moveCountLabel_1->setGeometry(100, 700, 150, 50);
+
+
+    movePromptLabel->setGeometry(1290, 300, 200, 50);
 
     // 设置样式
-    playerNameLabel->setStyleSheet("font-size: 16px;");
-    remainingBarriersLabel->setStyleSheet("font-size: 16px;");
-    movePromptLabel->setStyleSheet("font-size: 16px;");
-    moveCountLabel->setStyleSheet("font-size: 16px;");
+    playerNameLabel_1->setStyleSheet("font-size: 25px; color: red;");
+    playerNameLabel_2->setStyleSheet("font-size: 25px; color: blue;");
+    remainingBarriersLabel_1->setStyleSheet("font-size: 25px; color: red;");
+    remainingBarriersLabel_2->setStyleSheet("font-size: 25px; color: blue;");
+    moveCountLabel_1->setStyleSheet("font-size: 25px; color: red;");
+    moveCountLabel_2->setStyleSheet("font-size: 25px; color: blue;");
+
+    QFont font("Arial", 16); // 创建字体对象，指定字体名称和字号
+    font.setWeight(QFont::Bold);
+    playerNameLabel_1->setFont(font); // 为标签设置字体
+    playerNameLabel_2->setFont(font);
+    remainingBarriersLabel_1->setFont(font);
+    remainingBarriersLabel_2->setFont(font);
+    moveCountLabel_1->setFont(font);
+    moveCountLabel_2->setFont(font);
+    movePromptLabel->setFont(font);
 }
 
-void TextPrompt::setPlayerName(const QString& playerName)
+void TextPrompt::get_count_barrier(int count1, int count2) {
+    this->count_barrier_1 = count1;
+    this->count_barrier_2 = count2;
+}
+void TextPrompt::get_count_round(int count1, int count2) {
+    this->count_round_1 = count1;
+    this->count_round_2 = count2;
+}
+void TextPrompt::get_play_id(PlayerId player) {
+    this->player_id = player;
+}
+
+void TextPrompt::setPlayerName()
 {
-    playerNameLabel->setText(playerName);
+    playerNameLabel_1->setText("Player 1");
+    playerNameLabel_2->setText("Player 2");
 }
 
-void TextPrompt::setRemainingBarriers(int count)
+void TextPrompt::setRemainingBarriers(int count1, int count2)
 {
-    remainingBarriersLabel->setText(QString("剩余障碍物数: %1").arg(count));
+    remainingBarriersLabel_1->setText(QString("barrier: %1").arg(count1));
+    remainingBarriersLabel_2->setText(QString("barrier: %1").arg(count2));
 }
 
-void TextPrompt::setMovePrompt(bool isMyMove)
+void TextPrompt::setMovePrompt(PlayerId player)
 {
-    if (isMyMove)
-        movePromptLabel->setText("轮到Player1");
-    else
-        movePromptLabel->setText("轮到Player2");
+    if (player == FIRST) {
+        movePromptLabel->setStyleSheet("font-size: 25px; color: red;");
+        movePromptLabel->setText("Red's turn");
+    }
+
+    else {
+        movePromptLabel->setStyleSheet("font-size: 25px; color: blue;");
+        movePromptLabel->setText("Blue's turn");
+    }
+
 }
 
-void TextPrompt::setMoveCount(int count)
+void TextPrompt::setMoveCount(int count1, int count2)
 {
-    moveCountLabel->setText(QString("移动步数: %1").arg(count));
+    moveCountLabel_1->setText(QString("round: %1").arg(count1));
+    moveCountLabel_2->setText(QString("round: %1").arg(count2));
 }
 
+void TextPrompt::paint() {
+    setPlayerName();
+    setRemainingBarriers(this->count_barrier_1, this->count_barrier_2);
+    setMoveCount(this->count_round_1, this->count_round_2);
+    setMovePrompt(this->player_id);
+}

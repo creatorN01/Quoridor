@@ -8,18 +8,18 @@
 #include <QPainter>
 
 View::View(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::View)
-    , timer(new QTimer(this)) // 定时器
-    , game_status(INIT)
+    : QMainWindow(parent), ui(new Ui::View), timer(new QTimer(this)) // 定时器
+      ,
+      game_status(INIT)
 {
     ui->setupUi(this);
     player1 = QSharedPointer<Player_ui>::create(PlayerId::FIRST, this);
     player2 = QSharedPointer<Player_ui>::create(PlayerId::SECOND, this);
     map = QSharedPointer<Map_ui>::create(this);
-    QPoint point(0,0);
+    QPoint point(0, 0);
     arrow = QSharedPointer<Arrow_ui>::create(point, false, this);
     tempBarrier = QSharedPointer<Barrier_ui>::create(this);
+    info = new TextPrompt(this);
     // const int GAP = 1; // 每隔0.001秒触发一次槽函数move
     // timer->start(GAP);
     // connect(timer, SIGNAL(timeout()), this, SLOT(move()));
@@ -46,6 +46,21 @@ void View::initUI()
     // qDebug() << "after initUI";
     // qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
     // qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
+    // qDebug() << "after initUI";
+    // qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
+    // qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
+
+    // 创建布局管理器
+    QVBoxLayout *layout = new QVBoxLayout();
+
+    // 将 TextPrompt 添加到布局中
+    layout->addWidget(info);
+
+    // 将布局设置给主窗口
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setLayout(layout);
+    setCentralWidget(centralWidget);
+
     // 强制重绘
     update();
 }
@@ -69,7 +84,6 @@ void View::paintEvent(QPaintEvent *event)
     }
     else
     {
-
     }
 
     // 如果需要画tempBarrier的话
@@ -84,9 +98,8 @@ void View::paintEvent(QPaintEvent *event)
         barrier_->paint(painter);
     }
 
-
+    info->paint();
 }
-
 
 void View::mousePressEvent(QMouseEvent *e)
 {
@@ -103,8 +116,10 @@ void View::wheelEvent(QWheelEvent *event)
 {
     qDebug() << "wheelEvent";
     auto type = this->tempBarrier->get_type();
-    if (type == BarrierType::horizontal) type = BarrierType::vertical;
-    else type = BarrierType::horizontal;
+    if (type == BarrierType::horizontal)
+        type = BarrierType::vertical;
+    else
+        type = BarrierType::horizontal;
     this->tempBarrier->set_type(type);
     update();
 }
@@ -113,47 +128,53 @@ void View::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key())
     {
-      case Qt::Key_Up:
+    case Qt::Key_Up:
         emit keyPressSignal(Up);
         break;
-      case Qt::Key_Down:
+    case Qt::Key_Down:
         emit keyPressSignal(Down);
         break;
-      case Qt::Key_Left:
+    case Qt::Key_Left:
         emit keyPressSignal(Left);
         break;
-      case Qt::Key_Right:
+    case Qt::Key_Right:
         emit keyPressSignal(Right);
         break;
-      case Qt::Key_Space:
+    case Qt::Key_Space:
         emit placeBarrierSignal(true);
         break;
     }
 }
 
-
-bool View::ClickedInMap(QPoint point) {
-    if(point.x() >= 300 && point.x() <= 1200 && point.y() >= 0 && point.y() <= 900) return true;
-    else return false;
+bool View::ClickedInMap(QPoint point)
+{
+    if (point.x() >= 300 && point.x() <= 1200 && point.y() >= 0 && point.y() <= 900)
+        return true;
+    else
+        return false;
 }
 
-bool View::ClickedInPlayer(PlayerId activePlayer, QPoint point) {
-    if(activePlayer == FIRST) {
-        if(point.x() >= player1->get_pos().x() && point.x() <= player1->get_pos().x() + 100
-            && point.y() >= player1->get_pos().y() && point.y() <= player1->get_pos().y() + 100) {
+bool View::ClickedInPlayer(PlayerId activePlayer, QPoint point)
+{
+    if (activePlayer == FIRST)
+    {
+        if (point.x() >= player1->get_pos().x() && point.x() <= player1->get_pos().x() + 100 && point.y() >= player1->get_pos().y() && point.y() <= player1->get_pos().y() + 100)
+        {
             return true;
         }
     }
-    else if(activePlayer == SECOND) {
-        if(point.x() >= player2->get_pos().x() && point.x() <= player2->get_pos().x() + 100
-            && point.y() >= player2->get_pos().y() && point.y() <= player2->get_pos().y() + 100) {
+    else if (activePlayer == SECOND)
+    {
+        if (point.x() >= player2->get_pos().x() && point.x() <= player2->get_pos().x() + 100 && point.y() >= player2->get_pos().y() && point.y() <= player2->get_pos().y() + 100)
+        {
             return true;
         }
     }
     return false;
 }
 
-QPoint View::CorrectBarrierPosition(QPoint point) {
+QPoint View::CorrectBarrierPosition(QPoint point)
+{
     point.setX(int((point.x() + 50) / 100) * 100);
     point.setY(int((point.y() + 50) / 100) * 100);
     return point;
@@ -164,9 +185,9 @@ void View::ShowArrowAround(QPoint point)
     qDebug() << "ShowArrowAround调用";
     this->arrow->setIfNeedToShow(true);
     this->arrow->setPoint(point);
-//    arrow = QSharedPointer<Arrow_ui>::create(point);
-//    arrow.data()->show();
-//    arrow.data()->update();
+    //    arrow = QSharedPointer<Arrow_ui>::create(point);
+    //    arrow.data()->show();
+    //    arrow.data()->update();
     update();
 }
 
@@ -204,42 +225,53 @@ Direction View::GetDirectionFromKeyboard()
     return this->arrow->getDirection();
 }
 
-void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction) {
-    //qDebug() << "player1: " << player1->x() << "," << player1->y();
-    //qDebug() << "player2: " << player2->x() << "," << player2->y();
+void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction)
+{
+    // qDebug() << "player1: " << player1->x() << "," << player1->y();
+    // qDebug() << "player2: " << player2->x() << "," << player2->y();
 
-    if(activePlayer == FIRST) {
-        if(direction == Up) {
+    if (activePlayer == FIRST)
+    {
+        if (direction == Up)
+        {
             QPoint point(player1->get_pos().x(), player1->get_pos().y() - 100);
             player1->set_pos(point);
         }
-        else if(direction == Down) {
+        else if (direction == Down)
+        {
             QPoint point(player1->get_pos().x(), player1->get_pos().y() + 100);
             player1->set_pos(point);
         }
-        else if(direction == Left) {
+        else if (direction == Left)
+        {
             QPoint point(player1->get_pos().x() - 100, player1->get_pos().y());
             player1->set_pos(point);
         }
-        else if(direction == Right) {
+        else if (direction == Right)
+        {
             QPoint point(player1->get_pos().x() + 100, player1->get_pos().y());
             player1->set_pos(point);
         }
     }
-    else if(activePlayer == SECOND) {
-        if(direction == Up) {
+    else if (activePlayer == SECOND)
+    {
+        if (direction == Up)
+        {
             QPoint point(player2->get_pos().x(), player2->get_pos().y() - 100);
             player2->set_pos(point);
         }
-        else if(direction == Down) {
+        else if (direction == Down)
+        {
             QPoint point(player2->get_pos().x(), player2->get_pos().y() + 100);
             player2->set_pos(point);
         }
-        else if(direction == Left) {
+        else if (direction == Left)
+        {
             QPoint point(player2->get_pos().x() - 100, player2->get_pos().y());
             player2->set_pos(point);
         }
-        else if(direction == Right) {
+        else if (direction == Right)
+        {
             QPoint point(player2->get_pos().x() + 100, player2->get_pos().y());
             player2->set_pos(point);
         }
