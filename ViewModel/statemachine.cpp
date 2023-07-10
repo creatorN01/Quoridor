@@ -19,16 +19,24 @@ void StateMachine::SetPlayerNum(int num)
     this->playerNum = num;
 }
 
+void StateMachine::SetPosition(PlayerId activePlayer, std::pair<int, int> pos)
+{
+    this->curPosition[activePlayer] = pos;
+}
+
+
 
 
 void StateMachine::InitPosition()
 {
-    std::pair<int, int> p2(0,4);
     std::pair<int, int> p1(8,4);
-    std::pair<PlayerId, std::pair<int, int>> position1(FIRST, p1);
-    std::pair<PlayerId, std::pair<int, int>> position2(SECOND, p2);
-    curPosition.push_back(position1);
-    curPosition.push_back(position2);
+    std::pair<int, int> p2(0,4);
+    this->curPosition[0] = p1;
+    this->curPosition[1] = p2;
+//    std::pair<PlayerId, std::pair<int, int>> position1(FIRST, p1);
+//    std::pair<PlayerId, std::pair<int, int>> position2(SECOND, p2);
+//    curPosition.push_back(position1);
+//    curPosition.push_back(position2);
 }
 
 void StateMachine::SetInitialState()
@@ -79,59 +87,65 @@ bool StateMachine::SelectPositionCommand()
     if(this->curNodeIndex != Operation) return false;
 
 
-    auto tran = this->nodeList[Operation].get();
-    auto curOperationTypeNode = static_cast<OperationStateNode *>(tran);
+//    auto tran = this->nodeList[Operation].get();
+//    auto curOperationTypeNode = static_cast<OperationStateNode *>(tran);
 
-    auto tran2 = this->nodeList[ActivePlayer].get();
-    auto curActivePlayerNode = static_cast<ActivePlayerStateNode *>(tran2);
-    auto curActivePlayer = curActivePlayerNode->GetActivePlayer();
+//    auto tran2 = this->nodeList[ActivePlayer].get();
+//    auto curActivePlayerNode = static_cast<ActivePlayerStateNode *>(tran2);
+//    auto curActivePlayer = curActivePlayerNode->GetActivePlayer();
 
-    auto tran3 = this->nodeList[AtomicExecute].get();
-    auto curNode = static_cast<AtomicExecuteStateNode *>(tran3);
+//    auto tran3 = this->nodeList[AtomicExecute].get();
+//    auto curNode = static_cast<AtomicExecuteStateNode *>(tran3);
 
-    std::pair<int, int> position = this->curPosition[curActivePlayer].second;
-    Direction direction = curNode->GetDirection();
-    std::pair<int, int> pos1 = curNode->GetPosition1();
-    std::pair<int, int> pos2 = curNode->GetPosition2();
-    // 修改Model层的数据
-    switch (curOperationTypeNode->GetOperationType())
-    {
-      case Move:
-        // 传什么参数?坐标和方向
-        // 调用执行函数
-        if (this->ExecuteMoveCommand(curActivePlayer, position, direction) == false) return false;
-        break;
-      case PlaceBarrier:
-        // 传什么参数?两个点的坐标
-        if (this->ExecutePlaceBarrierCommand(pos1, pos2) == false) return false;
-        break;
-      case RemoveBarrier:
-        if (this->ExecuteRemoveBarrierCommand(pos1, pos2) == false) return false;
-        break;
-    }
+//    std::pair<int, int> position = this->curPosition[curActivePlayer].second;
+//    Direction direction = curNode->GetDirection();
+//    std::pair<int, int> pos1 = curNode->GetPosition1();
+//    std::pair<int, int> pos2 = curNode->GetPosition2();
+//    // 修改Model层的数据
+//    switch (curOperationTypeNode->GetOperationType())
+//    {
+//      case Move:
+//        // 传什么参数?坐标和方向
+//        // 调用执行函数
+//        if (this->ExecuteMoveCommand(curActivePlayer, position, direction) == false) return false;
+//        break;
+//      case PlaceBarrier:
+//        // 传什么参数?两个点的坐标
+//        if (this->ExecutePlaceBarrierCommand(pos1, pos2) == false) return false;
+//        break;
+//      case RemoveBarrier:
+//        if (this->ExecuteRemoveBarrierCommand(pos1, pos2) == false) return false;
+//        break;
+//    }
+
+
+
     curNodeIndex = AtomicExecute;
-    // 进行到这里说明Model已经执行成功了，这时就可以修改ViewModel层面的数据了
-    if (curOperationTypeNode->GetOperationType() == Move)
-    {
-        Direction direction = curNode->GetDirection();
-        switch (direction)
-        {
-          case Up:
-            (curPosition[curActivePlayer].second.first)--;
-            break;
-          case Down:
-            (curPosition[curActivePlayer].second.first)++;
-            break;
-          case Left:
-            (curPosition[curActivePlayer].second.second)--;
-            break;
-          case Right:
-            (curPosition[curActivePlayer].second.second)++;
-            break;
-        }
-    }
-    // 调用SetActivePlayerCommand命令，使游戏进入下一回合
-    this->SetActivePlayerCommand();
+
+
+
+//    // 进行到这里说明Model已经执行成功了，这时就可以修改ViewModel层面的数据了
+//    if (curOperationTypeNode->GetOperationType() == Move)
+//    {
+//        Direction direction = curNode->GetDirection();
+//        switch (direction)
+//        {
+//          case Up:
+//            (curPosition[curActivePlayer].second.first)--;
+//            break;
+//          case Down:
+//            (curPosition[curActivePlayer].second.first)++;
+//            break;
+//          case Left:
+//            (curPosition[curActivePlayer].second.second)--;
+//            break;
+//          case Right:
+//            (curPosition[curActivePlayer].second.second)++;
+//            break;
+//        }
+//    }
+//    // 调用SetActivePlayerCommand命令，使游戏进入下一回合
+//    this->SetActivePlayerCommand();
     return true;
 }
 

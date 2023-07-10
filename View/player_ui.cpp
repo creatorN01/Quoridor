@@ -78,12 +78,15 @@ void Player_ui::mousePressEvent(QMouseEvent *event)
     QWidget::mousePressEvent(event);
 }
 
-void Player_ui::set_pos(const QPoint &pos)
+void Player_ui::set_pos(const QPoint pos)
 {
+    qDebug() << "pos" << pos.x() << "," <<  pos.y();
+    qDebug() << "before set_pos" << this->get_pos().x() << "," <<  this->get_pos().y();
     this->pos = pos;
+    qDebug() << "after set_pos" << this->get_pos().x() << "," <<  this->get_pos().y();
 }
 
-void Player_ui::set_selected(const bool &isSelected)
+void Player_ui::set_selected(const bool isSelected)
 {
     this->isSelected = isSelected;
 }
