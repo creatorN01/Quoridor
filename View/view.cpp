@@ -23,7 +23,6 @@ View::View(QWidget *parent)
     // const int GAP = 1; // 每隔0.001秒触发一次槽函数move
     // timer->start(GAP);
     // connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-    QObject::connect(this, SIGNAL(this->keyPressSignal(Direction)), this->arrow.data(), SLOT(setDirection(Direction)));
     // 如果完全贴合图片大小，某些屏幕上可能显示不全
     this->setFixedSize(1500, 900);
 
@@ -177,7 +176,8 @@ void View::GetDirectionFromKeyboard()
     // 创建一个事件循环
     QEventLoop loop;
     // 连接键盘信号到事件循环的退出槽函数
-    QObject::connect(this, SIGNAL(this->keyPressSignal(Direction)), &loop, SLOT(quit));
+    QObject::connect(this, SIGNAL(keyPressSignal(Direction)), arrow.data(), SLOT(setDirection(Direction)));
+    QObject::connect(this, SIGNAL(keyPressSignal(Direction)), &loop, SLOT(quit()));
 
     // 等待键盘信号
     loop.exec();
