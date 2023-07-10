@@ -53,12 +53,14 @@ public:
     bool ClickedInPlayer(PlayerId activePlayer, QPoint point);
     QPoint CorrectBarrierPosition(QPoint point);
     void ShowArrowAround(QPoint point);
-    void ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type);
+    BarrierType ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type);
     Direction GetDirectionFromKeyboard();
     void MoveActivePlayerPos(PlayerId activePlayer, Direction direction);
+    void PlaceBarrier_ui();
 signals:
     void mySignal(QPoint pos);
     void keyPressSignal(Direction direction);
+    void placeBarrierSignal(bool fixed);
 
 // public slots:
     void react_game_status_change(const GameStatus &status); // 接收游戏状态改变的信号
@@ -83,29 +85,11 @@ private:
     TextPrompt* info;
     // ...
     // 初步觉得用一个vector存，后期如果有不方便的地方，可以再调整，换成map什么的
-    std::vector<QSharedPointer<Barrier_ui>> Barrier_ui_List;
+    QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>> Barrier_ui_List;
 
     QTimer* timer;
     // int curFrame; // 用于绘制地图，记录帧数
     GameStatus game_status; // 游戏状态
-
-
-
-
-
-
-
-//    QSharedPointer<Commands> first_player_move;
-//    QSharedPointer<Commands> second_player_move;
-//    QSharedPointer<Commands> first_player_put;
-//    QSharedPointer<Commands> second_player_put;
-//    QSharedPointer<Commands> first_player_break;
-//    QSharedPointer<Commands> second_player_break;
-
-
-//    std::function<QPoint(void)> get_first_player_pos;
-//    std::function<QPoint(void)> get_second_player_pos;
-
 
 };
 

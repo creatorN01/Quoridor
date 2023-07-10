@@ -16,6 +16,7 @@ class App : public QObject
     Q_OBJECT
 public:
     App();
+    ~App(){qDebug() << "析构";}
     void InitGameEnv();
     void Run();
     void ExitGame();
