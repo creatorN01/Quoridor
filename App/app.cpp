@@ -5,7 +5,7 @@ App::App()
 {
   // 进行一些view层的信号与槽函数的绑定工作
   // 但是现在还不能确定
-  // qDebug() << "成功连接";
+   qDebug() << "App()      成功连接";
 }
 
 void App::InitGameEnv()
@@ -52,7 +52,7 @@ void App::When_Clicked(QPoint clickedPosition)
   // qDebug() << "When_clicked";
   // 数据准备
   // 把map取出来
-  auto Map_ = model->GetMapReference();
+  auto Map_ = model->GetMap();
   // 拿到状态机的状态
   auto stateMachine = view_model->GetStateMachine();
   auto state = stateMachine->GetCurState();
@@ -71,6 +71,11 @@ void App::When_Clicked(QPoint clickedPosition)
   auto execDirection = curAtomicExecuteNode->GetDirection();
   auto execPos1 = curAtomicExecuteNode->GetPosition1();
   auto execPos2 = curAtomicExecuteNode->GetPosition2();
+  auto execPlaceBarrierType = curAtomicExecuteNode->GetBarrierType();
+  auto execPlace1 = curAtomicExecuteNode->GetPlace1();
+  auto execPlace2 = curAtomicExecuteNode->GetPlace2();
+  auto execPlace3 = curAtomicExecuteNode->GetPlace3();
+  auto execPlace4 = curAtomicExecuteNode->GetPlace4();
 
 
   // PlaceBarrier状态下的规约点
@@ -101,7 +106,7 @@ void App::When_Clicked(QPoint clickedPosition)
     } else if (0) {
         // remove待实现
     } else {    // 意味着用户要放骨头
-        qDebug() << "要放置骨头";
+        qDebug() << "要放置Barrier";
 
         // 调用viewModel, selectOperation
         stateMachine->SelectOperationCommand(PlaceBarrier);
@@ -127,6 +132,7 @@ void App::When_Clicked(QPoint clickedPosition)
         qDebug() << "keyBoardDirection = " << keyBoardDirection;
         pos1.first = (correctPointMove.x() - 300) / 100;
         pos1.second = correctPointMove.y() / 100;
+        qDebug() << "move左上基准点的index" << "fir" << pos1.first << "sec" << pos1.second;
         switch (keyBoardDirection)
         {
           case Up:
@@ -146,6 +152,7 @@ void App::When_Clicked(QPoint clickedPosition)
             pos2.second = pos1.second;
             break;
         }
+        qDebug() << "move终点的index" << "fir" << pos2.first << "sec" << pos2.second;
         stateMachine->SetExecutionInfo(keyBoardDirection, pos1, pos2);
         stateMachine->SelectPositionCommand();
         // 递归调用，这时候就去到AtomicExecute了
@@ -165,8 +172,14 @@ void App::When_Clicked(QPoint clickedPosition)
         pos1_.second = pos4_.second - 1;
         pos2_.first = pos4_.first;
         pos2_.second = pos4_.second - 1;
-        pos3_.first = pos3_.first - 1;
-        pos3_.second = pos3_.second;
+        pos3_.first = pos4_.first - 1;
+        pos3_.second = pos4_.second;
+        qDebug() << "PlaceBarrier四个点的index";
+        qDebug() << "fir" << pos1_.first << "sec" << pos1_.second;
+        qDebug() << "fir" << pos2_.first << "sec" << pos2_.second;
+        qDebug() << "fir" << pos3_.first << "sec" << pos3_.second;
+        qDebug() << "fir" << pos4_.first << "sec" << pos4_.second;
+
         stateMachine->SetPlaceBarrierExecInfo(barrierTypePlaced, pos1_, pos2_, pos3_, pos4_);
         stateMachine->SelectPositionCommand();
         // 递归调用，这时候就去到AtomicExecute了
@@ -184,27 +197,48 @@ void App::When_Clicked(QPoint clickedPosition)
     {
       case Move:
         qDebug() << "ExecuteMove";
+        qDebug() << "execPos1 = " << execPos1.first << "," << execPos1.second;
+        qDebug() << "execPos2 = " << execPos2.first << "," << execPos2.second;
         // 判断能不能走
-        if (Map_.Accessible(execPos1, execPos2))
+        if (Map_->Accessible(execPos1, execPos2) == true)
         {
             // 修改model层的数据——无
-
+                qDebug() << "yes";
             // 修改viewModel
             stateMachine->SetPosition(curActivePlayer, execPos2);
             // 修改view
             view->MoveActivePlayerPos(curActivePlayer, execDirection);
 
         }
+        else
+        {
+            qDebug() << "NOT";
+        }
         // 设置状态机，进入后手的ActivePlayer状态
         stateMachine->SetActivePlayerCommand();
         break;
       case PlaceBarrier:
         qDebug() << "ExecutePlaceBarrier";
-        // 先修改model层的数据（waiting）
-        // 再修改viewModel层的数据————无
-        // 最后修改view层的数据（waiting）
-        // view要改什么东西？画Barrier、文字提示的更新、vector<> Barrier_ui_List
+        qDebug() << "execPlace1" << "fir" << execPlace1.first << "sec" << execPlace1.second;
+        qDebug() << "execPlace2" << "fir" << execPlace2.first << "sec" << execPlace2.second;
+        qDebug() << "execPlace3" << "fir" << execPlace3.first << "sec" << execPlace3.second;
+        qDebug() << "execPlace4" << "fir" << execPlace4.first << "sec" << execPlace4.second;
+        // 先修改model层的数据
+        if (execPlaceBarrierType == BarrierType::horizontal)    // 水平
+        {
+            Map_->Remove(curActivePlayer, execPlace1, execPlace3);
+            Map_->Remove(curActivePlayer, execPlace2, execPlace4);
+        }
+        else
+        {
+            Map_->Remove(curActivePlayer, execPlace1, execPlace2);
+            Map_->Remove(curActivePlayer, execPlace3, execPlace4);
+        }
 
+        // 再修改viewModel层的数据————无
+        // 最后修改view层的数据
+        // view要改什么东西？画Barrier、文字提示的更新、vector<> Barrier_ui_List
+        view->PlaceBarrier_ui();
         // 设置状态机，进入后手的ActivePlayer状态
         stateMachine->SetActivePlayerCommand();
         break;

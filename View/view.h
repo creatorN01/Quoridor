@@ -56,10 +56,11 @@ public:
     BarrierType ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type);
     Direction GetDirectionFromKeyboard();
     void MoveActivePlayerPos(PlayerId activePlayer, Direction direction);
+    void PlaceBarrier_ui();
 signals:
     void mySignal(QPoint pos);
     void keyPressSignal(Direction direction);
-    void placeBarrierSignal();
+    void placeBarrierSignal(bool fixed);
 
 // public slots:
     void react_game_status_change(const GameStatus &status); // 接收游戏状态改变的信号

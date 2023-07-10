@@ -43,9 +43,9 @@ void View::initUI()
     QPoint point2(700, 0);
     player1->set_pos(point1);
     player2->set_pos(point2);
-    qDebug() << "after initUI";
-    qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
-    qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
+    // qDebug() << "after initUI";
+    // qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
+    // qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
     // 强制重绘
     update();
 }
@@ -78,17 +78,23 @@ void View::paintEvent(QPaintEvent *event)
         tempBarrier->paint(painter);
     }
 
+    // 画 Barrier_ui_List
+    for (auto barrier_ : Barrier_ui_List)
+    {
+        barrier_->paint(painter);
+    }
+
 
 }
 
 
 void View::mousePressEvent(QMouseEvent *e)
 {
-    qDebug() << "hello";
+    // qDebug() << "hello";
     auto touchPoint = e->pos();
     qDebug() << touchPoint;
 
-    qDebug() << "准备emit";
+    // qDebug() << "准备emit";
     emit mySignal(touchPoint);
     // qDebug() << "emit信号";
 }
@@ -120,7 +126,7 @@ void View::keyPressEvent(QKeyEvent *event)
         emit keyPressSignal(Right);
         break;
       case Qt::Key_Space:
-        emit placeBarrierSignal();
+        emit placeBarrierSignal(true);
         break;
     }
 }
@@ -175,8 +181,8 @@ BarrierType View::ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type)
 
     // 故技重施
     QEventLoop loop;
-    QObject::connect(this, SIGNAL(placeBarrierSignal()), tempBarrier.data(), SLOT(set_fixed(true)));
-    QObject::connect(this, SIGNAL(placeBarrierSignal()), &loop, SLOT(quit()));
+    QObject::connect(this, SIGNAL(placeBarrierSignal(bool)), tempBarrier.data(), SLOT(set_fixed(bool)));
+    QObject::connect(this, SIGNAL(placeBarrierSignal(bool)), &loop, SLOT(quit()));
 
     loop.exec();
     qDebug() << "收到空格信号";
@@ -199,8 +205,8 @@ Direction View::GetDirectionFromKeyboard()
 }
 
 void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction) {
-    qDebug() << "player1: " << player1->x() << "," << player1->y();
-    qDebug() << "player2: " << player2->x() << "," << player2->y();
+    //qDebug() << "player1: " << player1->x() << "," << player1->y();
+    //qDebug() << "player2: " << player2->x() << "," << player2->y();
 
     if(activePlayer == FIRST) {
         if(direction == Up) {
@@ -239,8 +245,16 @@ void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction) {
         }
     }
     this->arrow->setIfNeedToShow(false);
-    qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
-    qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
+    // qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
+    // qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
     update();
 }
 
+void View::PlaceBarrier_ui()
+{
+    Barrier_ui_List.push_back(tempBarrier);
+    tempBarrier->set_fixed(true);
+    tempBarrier->set_needToShow(false);
+    // 文字提示变更（待定）
+    update();
+}

@@ -19,6 +19,11 @@ public:
     Direction GetDirection();
     std::pair<int, int> GetPosition1();
     std::pair<int, int> GetPosition2();
+    BarrierType GetBarrierType(){return this->barrierType;}
+    std::pair<int, int> GetPlace1(){return this->PlacePos1;}
+    std::pair<int, int> GetPlace2(){return this->PlacePos2;}
+    std::pair<int, int> GetPlace3(){return this->PlacePos3;}
+    std::pair<int, int> GetPlace4(){return this->PlacePos4;}
 private:
     // 用于Move的数据
     Direction direction;

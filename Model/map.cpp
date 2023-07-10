@@ -1,5 +1,6 @@
 #include "map.h"
 #include "./Common/common.h"
+#include <QDebug>
 Map::Map()
 {
     /*initialize graph for whole , player 1 and player 2*/
@@ -112,118 +113,261 @@ bool Map::Solve(PlayerId player_id, int Curr_X, int Curr_Y)//
     }
 }
 
-bool Map::Accessible(std::pair<int, int>point_1, std::pair<int, int>point_2)//move
+//bool Map::Accessible(std::pair<int, int>point_1, std::pair<int, int>point_2)//move
+//{
+//    int y_1 = point_1.first;
+//    int x_1 = point_1.second;
+//    int y_2 = point_2.first;
+//    int x_2 = point_2.second;
+//    qDebug() << " y_1 " << y_1 << " x_1 " << x_1<< " y_2 " << y_2 << " x_2 " << x_2;
+//    if (x_1 < 0 || x_1 >= MAPSIZE || y_1 < 0 || y_1 >= MAPSIZE) /*point_1 out of range*/
+//        return false;
+//    if (x_2 < 0 || x_2 >= MAPSIZE || y_2 < 0 || y_2 >= MAPSIZE) /*point_2 out of range*/
+//        return false;
+//    // p_2 p_1
+//    if (y_1 == y_2 && x_1 > x_2)
+//    {
+//        if (map[y_1][x_1].left == Accessibility::PASSABLE && map[y_2][x_2].right == Accessibility::PASSABLE) return true;
+//        return false;
+//    }
+
+//    // p_1 p_2
+//    if (y_1 == y_2 && x_1 < x_2)
+//    {
+//        if (map[y_1][x_1].right == Accessibility::PASSABLE && map[y_2][x_2].left == Accessibility::PASSABLE) return true;
+//        return false;
+//    }
+
+//    // p_2
+//    // ---
+//    // p_1
+//    if (x_1 == x_2 && y_1 > y_2)
+//    {
+//        if (map[y_1][x_1].up == Accessibility::PASSABLE && map[y_2][x_2].down == Accessibility::PASSABLE) return true;
+//        return false;
+//    }
+
+//    // p_1
+//    // ---
+//    // p_2
+//    if (x_1 == x_2 && y_1 < y_2)
+//    {
+//        if (map[y_1][x_1].down == Accessibility::PASSABLE && map[y_2][x_2].up == Accessibility::PASSABLE) return true;
+//        return false;
+//    }
+//    return false;//unexpected situation
+//}
+
+bool Map::Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2)/*move*/
 {
-    int y_1 = point_1.first;
-    int x_1 = point_1.second;
-    int y_2 = point_2.first;
-    int x_2 = point_2.second;
-    if (x_1 < 0 || x_1 >= MAPSIZE || y_1 < 0 || y_1 >= MAPSIZE) /*point_1 out of range*/
-        return false;
-    if (x_2 < 0 || x_2 >= MAPSIZE || y_2 < 0 || y_2 >= MAPSIZE) /*point_2 out of range*/
-        return false;
-    // p_2 p_1
-    if (y_1 == y_2 && x_1 > x_2)
+//    int x_1 = point_1.first;
+//    int y_1 = point_1.second;
+//    int x_2 = point_2.first;
+//    int y_2 = point_2.second;
+        int y_1 = point_1.first;
+        int x_1 = point_1.second;
+        int y_2 = point_2.first;
+        int x_2 = point_2.second;
+
+    qDebug() << "Map::Accessible" ;
+    qDebug() << "point_1" << " fir " << x_1 << " sec " << y_1;
+    qDebug() << "point_2" << " fir " << x_2 << " sec " << y_2;
+    /*p_2 p_1*/
+    if(x_1 == x_2 && y_1 > y_2)
     {
-        if (map[y_1][x_1].left == Accessibility::PASSABLE && map[y_2][x_2].right == Accessibility::PASSABLE) return true;
+        qDebug() << "x_1 == x_2 && y_1 > y_2";
+        if(map[x_1][y_1].left == Accessibility::PASSABLE && map[x_2][y_2].right == Accessibility::PASSABLE) return true;
+
         return false;
     }
 
-    // p_1 p_2
-    if (y_1 == y_2 && x_1 < x_2)
+    /*p_1 p_2*/
+    if(x_1 == x_2 && y_1 < y_2)
     {
-        if (map[y_1][x_1].right == Accessibility::PASSABLE && map[y_2][x_2].left == Accessibility::PASSABLE) return true;
+        qDebug() << "x_1 == x_2 && y_1 < y_2";
+        if(map[x_1][y_1].right == Accessibility::PASSABLE && map[x_2][y_2].left == Accessibility::PASSABLE) return true;
+
         return false;
     }
 
-    // p_2
-    // ---
-    // p_1
-    if (x_1 == x_2 && y_1 > y_2)
+    /*  p_2
+         ---
+         p_1   */
+    if(y_1 == y_2 && x_1 > x_2)
     {
-        if (map[y_1][x_1].up == Accessibility::PASSABLE && map[y_2][x_2].down == Accessibility::PASSABLE) return true;
+        qDebug() << "y_1 == y_2 && x_1 > x_2";
+        if(map[x_1][y_1].up == Accessibility::PASSABLE && map[x_2][y_2].down == Accessibility::PASSABLE) return true;
+
         return false;
     }
 
-    // p_1
-    // ---
-    // p_2
-    if (x_1 == x_2 && y_1 < y_2)
+    /*  p_1
+         ---
+         p_2  */
+    if(y_1 == y_2 && x_1 < x_2)
     {
-        if (map[y_1][x_1].down == Accessibility::PASSABLE && map[y_2][x_2].up == Accessibility::PASSABLE) return true;
+        qDebug() << "y_1 == y_2 && x_1 < x_2";
+        qDebug() << "map[" << x_1 << "][" << y_1 << "].down" << map[x_1][y_1].down;
+        qDebug() << "map[" << x_2 << "][" << y_2 << "].up" << map[x_2][y_2].up;
+        this->PrintMap();
+        if(map[x_1][y_1].down == Accessibility::PASSABLE && map[x_2][y_2].up == Accessibility::PASSABLE) return true;
+
         return false;
     }
-    return false;//unexpected situation
+    return false;
 }
 
+
+///*set barrier and remove edge*/
+//bool Map::Remove(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int>point_2)//set barrier
+//{
+//    int y_1 = point_1.first;
+//    int x_1 = point_1.second;
+//    int y_2 = point_2.first;
+//    int x_2 = point_2.second;
+//    if (y_1 == y_2)//竖着的杆子
+//    {
+//        if (x_1 < x_2)// point_1 | point_2
+//        {
+//            map[y_1][x_1].right = map[y_2][x_2].left = Accessibility::NOWAY;
+//            if (player_id == PlayerId::FIRST)//first
+//            {
+//                graph_2[y_1][x_1].right = graph_2[y_2][x_2].left = Accessibility::NOWAY;
+//            }
+//            else {//second
+//                graph_1[y_1][x_1].right = graph_1[y_2][x_2].left = Accessibility::NOWAY;
+//            }
+//            return true;
+//        }
+//        else {//  point_2 | point_1
+//            map[y_1][x_1].left = map[y_2][x_2].right = Accessibility::NOWAY;
+//            if (player_id == PlayerId::FIRST)//first
+//            {
+//                graph_2[y_1][x_1].left = graph_2[y_2][x_2].right = Accessibility::NOWAY;
+//            }
+//            else {//second
+//                graph_1[y_1][x_1].left = graph_1[y_2][x_2].right = Accessibility::NOWAY;
+//            }
+//            return true;
+//        }
+//    }
+//    else if (x_1 == x_2)//横着的杆子
+//    {
+//        //point_1
+//        //-------
+//        //point_2
+//        if (y_1 < y_2)
+//        {
+//            map[y_1][x_1].down = map[y_2][x_2].up = Accessibility::NOWAY;
+//            if (player_id == PlayerId::FIRST)//first
+//            {
+//                graph_2[y_1][x_1].down = graph_2[y_2][x_2].up = Accessibility::NOWAY;
+//            }
+//            else {//second
+//                graph_1[y_1][x_1].down = graph_1[y_2][x_2].up = Accessibility::NOWAY;
+//            }
+//            return true;
+//        }
+//        //point_2
+//        //-------
+//        //point_1
+//        else {
+//            map[y_1][x_1].up = map[y_2][x_2].down = Accessibility::NOWAY;
+//            if (player_id == PlayerId::FIRST)//first
+//            {
+//                graph_2[y_1][x_1].up = graph_2[y_2][x_2].down = Accessibility::NOWAY;
+//            }
+//            else {//second
+//                graph_1[y_1][x_1].up = graph_1[y_2][x_2].down = Accessibility::NOWAY;
+//            }
+//            return true;
+//        }
+//    }
+//    return false;//unexpected situation
+//}
 
 /*set barrier and remove edge*/
-bool Map::Remove(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int>point_2)//set barrier
+bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int>point_2)
 {
+//    int x_1 = point_1.first;
+//    int y_1 = point_1.second;
+//    int x_2 = point_2.first;
+//    int y_2 = point_2.second;
     int y_1 = point_1.first;
     int x_1 = point_1.second;
     int y_2 = point_2.first;
     int x_2 = point_2.second;
-    if (y_1 == y_2)//竖着的杆子
+    qDebug() << "Map::Remove" ;
+    qDebug() << "point_1" << " fir " << x_1 << " sec " << y_1;
+    qDebug() << "point_2" << " fir " << x_2 << " sec " << y_2;
+    if(x_1 == x_2)/*竖着的杆子*/
     {
-        if (x_1 < x_2)// point_1 | point_2
+        if(y_1 < y_2)/*point_1 | point_2*/
         {
-            map[y_1][x_1].right = map[y_2][x_2].left = Accessibility::NOWAY;
-            if (player_id == PlayerId::FIRST)//first
+            qDebug() << "x_1 == x_2 && y_1 < y_2";
+            map[x_1][y_1].right = map[x_2][y_2].left = Accessibility::NOWAY;
+            if(player_id == PlayerId::FIRST)/*first*/
             {
-                graph_2[y_1][x_1].right = graph_2[y_2][x_2].left = Accessibility::NOWAY;
+                graph_2[x_1][y_1].right = graph_2[x_2][y_2].left = Accessibility::NOWAY;
+            }else{/*second*/
+                graph_1[x_1][y_1].right = graph_1[x_2][y_2].left = Accessibility::NOWAY;
             }
-            else {//second
-                graph_1[y_1][x_1].right = graph_1[y_2][x_2].left = Accessibility::NOWAY;
-            }
+            qDebug() << "after remove";
+            //this->PrintMap();
             return true;
-        }
-        else {//  point_2 | point_1
-            map[y_1][x_1].left = map[y_2][x_2].right = Accessibility::NOWAY;
-            if (player_id == PlayerId::FIRST)//first
+        }else{/*point_2 | point_1*/
+            qDebug() << "x_1 == x_2 && y_1 > y_2";
+            map[x_1][y_1].left = map[x_2][y_2].right = Accessibility::NOWAY;
+            if(player_id == PlayerId::FIRST)/*first*/
             {
-                graph_2[y_1][x_1].left = graph_2[y_2][x_2].right = Accessibility::NOWAY;
+                graph_2[x_1][y_1].left = graph_2[x_2][y_2].right = Accessibility::NOWAY;
+            }else{/*second*/
+                graph_1[x_1][y_1].left = graph_1[x_2][y_2].right = Accessibility::NOWAY;
             }
-            else {//second
-                graph_1[y_1][x_1].left = graph_1[y_2][x_2].right = Accessibility::NOWAY;
-            }
+            qDebug() << "after remove";
+            //this->PrintMap();
             return true;
         }
     }
-    else if (x_1 == x_2)//横着的杆子
+    else if(y_1 == y_2)/*横着的杆子*/
     {
-        //point_1
-        //-------
-        //point_2
-        if (y_1 < y_2)
+        /*  point_1
+            -------
+            point_2 */
+        if(x_1 < x_2)
         {
-            map[y_1][x_1].down = map[y_2][x_2].up = Accessibility::NOWAY;
-            if (player_id == PlayerId::FIRST)//first
+            qDebug() << "x_1 < x_2 && y_1 == y_2";
+            map[x_1][y_1].down = map[x_2][y_2].up = Accessibility::NOWAY;
+            if(player_id == PlayerId::FIRST)/*first*/
             {
-                graph_2[y_1][x_1].down = graph_2[y_2][x_2].up = Accessibility::NOWAY;
+                graph_2[x_1][y_1].down = graph_2[x_2][y_2].up = Accessibility::NOWAY;
+            }else{/*second*/
+                graph_1[x_1][y_1].down = graph_1[x_2][y_2].up = Accessibility::NOWAY;
             }
-            else {//second
-                graph_1[y_1][x_1].down = graph_1[y_2][x_2].up = Accessibility::NOWAY;
-            }
+            qDebug() << "after remove";
+            this->PrintMap();
             return true;
         }
-        //point_2
-        //-------
-        //point_1
-        else {
-            map[y_1][x_1].up = map[y_2][x_2].down = Accessibility::NOWAY;
-            if (player_id == PlayerId::FIRST)//first
+        /*  point_2
+            -------
+            point_1 */
+        else{
+            qDebug() << "x_1 > x_2 && y_1 == y_2";
+            map[x_1][y_1].up = map[x_2][y_2].down = Accessibility::NOWAY;
+            if(player_id == PlayerId::FIRST)/*first*/
             {
-                graph_2[y_1][x_1].up = graph_2[y_2][x_2].down = Accessibility::NOWAY;
+                graph_2[x_1][y_1].up = graph_2[x_2][y_2].down = Accessibility::NOWAY;
+            }else{/*second*/
+                graph_1[x_1][y_1].up = graph_1[x_2][y_2].down = Accessibility::NOWAY;
             }
-            else {//second
-                graph_1[y_1][x_1].up = graph_1[y_2][x_2].down = Accessibility::NOWAY;
-            }
+            qDebug() << "after remove";
+           // this->PrintMap();
             return true;
         }
     }
-    return false;//unexpected situation
+    return false;
 }
+
 
 /*remove barrier and add edge*/
 bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int>point_2)
@@ -239,12 +383,20 @@ bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int
             map[y_1][x_1].right = map[y_2][x_2].left = Accessibility::PASSABLE;
             graph_2[y_1][x_1].right = graph_2[y_2][x_2].left = Accessibility::PASSABLE;
             graph_1[y_1][x_1].right = graph_1[y_2][x_2].left = Accessibility::PASSABLE;
+
+            qDebug() << "after add";
+            this->PrintMap();
+
             return true;
         }
         else {/*point_2 | point_1*/
             map[y_1][x_1].left = map[y_2][x_2].right = Accessibility::PASSABLE;
             graph_2[y_1][x_1].left = graph_2[y_2][x_2].right = Accessibility::PASSABLE;
             graph_1[y_1][x_1].left = graph_1[y_2][x_2].right = Accessibility::PASSABLE;
+
+            qDebug() << "after add";
+            this->PrintMap();
+
             return true;
         }
     }
@@ -258,6 +410,10 @@ bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int
             map[y_1][x_1].down = map[y_2][x_2].up = Accessibility::PASSABLE;
             graph_2[y_1][x_1].down = graph_2[y_2][x_2].up = Accessibility::PASSABLE;
             graph_1[y_1][x_1].down = graph_1[y_2][x_2].up = Accessibility::PASSABLE;
+
+            qDebug() << "after add";
+            this->PrintMap();
+
             return true;
         }
         /*  point_2
@@ -267,8 +423,29 @@ bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int
             map[y_1][x_1].up = map[y_2][x_2].down = Accessibility::PASSABLE;
             graph_2[y_1][x_1].up = graph_2[y_2][x_2].down = Accessibility::PASSABLE;
             graph_1[y_1][x_1].up = graph_1[y_2][x_2].down = Accessibility::PASSABLE;
+
+            qDebug() << "after add";
+            this->PrintMap();
+
             return true;
         }
     }
     return false;
+}
+
+// test
+void Map::PrintMap()
+{
+    /*  map  */
+    for (int i = 0; i < MAPSIZE; i++)
+    {
+        for (int j = 0; j < MAPSIZE; j++)
+        {
+            qDebug() << "(i,j,map[i][j]) = (" << i << "," << j << ")" ;
+             qDebug() << "(map[i][j].up) = (" << map[i][j].up << ")" ;
+             qDebug() << "(map[i][j].down) = (" << map[i][j].down << ")" ;;
+             qDebug() << "(map[i][j].left) = (" << map[i][j].left << ")" ;
+             qDebug() << "(map[i][j].right) = (" << map[i][j].right << ")" ;
+        }
+    }
 }
