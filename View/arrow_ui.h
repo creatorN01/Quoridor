@@ -11,7 +11,7 @@
 
 class Arrow_ui : public QWidget
 {
-    // Q_OBJECT
+    Q_OBJECT
 public:
     explicit Arrow_ui(QPoint point_, bool needtoShow_ = false, QWidget *parent = nullptr);
     void paint(QPainter &);
