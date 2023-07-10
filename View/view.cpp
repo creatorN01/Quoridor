@@ -17,6 +17,10 @@ View::View(QWidget *parent)
     player2 = QSharedPointer<Player_ui>::create(PlayerId::SECOND, this);
     map = QSharedPointer<Map_ui>::create(this);
     Barrier_ui_List = QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>>::create();
+
+    test = QSharedPointer<myClass>::create();
+
+
     QPoint point(0, 0);
     arrow = QSharedPointer<Arrow_ui>::create(point, false, this);
     tempBarrier = QSharedPointer<Barrier_ui>::create(this);
@@ -95,10 +99,19 @@ void View::paintEvent(QPaintEvent *event)
 
     // 画 Barrier_ui_List
     // qDebug() << "Barrier_ui_List.data()  size: " << (*(Barrier_ui_List.data())).size();//vector.size
-    for (auto barrier_ : *(Barrier_ui_List.data()))
+    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    // (*vectorPtr)
+    for (std::vector<QSharedPointer<Barrier_ui>>::iterator it = (*vectorPtr).begin(); it != (*vectorPtr).end(); it++)
     {
-        barrier_->paint(painter);
+        painter.save();
+        (*it).data()->paint(painter);
+        // painter.restore();
     }
+
+//    for (auto barrier_ : *(Barrier_ui_List.data()))
+//    {
+//        barrier_->paint(painter);
+//    }
 
     info->paint();
 }
