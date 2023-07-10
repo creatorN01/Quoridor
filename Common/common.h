@@ -2,6 +2,12 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+enum Accessibility
+{
+    PASSABLE = 1,
+    NOWAY = -1
+};
+
 enum PlayerId
 {
     FIRST = 0,

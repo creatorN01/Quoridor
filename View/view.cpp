@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QProcess>
-#include <QPainter> // 添加包含头文件
+#include <QPainter>
 
 View::View(QWidget *parent)
     : QMainWindow(parent)
