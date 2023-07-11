@@ -15,7 +15,10 @@
 #include "QMouseEvent"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class View; }
+namespace Ui
+{
+    class View;
+}
 QT_END_NAMESPACE
 
 class QTimer;
@@ -25,13 +28,12 @@ class View : public QMainWindow
     Q_OBJECT
 
 public:
-
     explicit View(QWidget *parent = nullptr);
     ~View();
 
     // 接口
-    void set_game_status(GameStatus status){this->game_status = status;}
-    GameStatus get_game_status(){return this->game_status;}
+    void set_game_status(GameStatus status) { this->game_status = status; }
+    GameStatus get_game_status() { return this->game_status; }
 
     // 用于判断与修正
     bool ClickedInMap(QPoint point);
@@ -52,6 +54,10 @@ public:
     void PlaceBarrier_ui();
     void RemoveBarrier_ui();
 
+    bool JudgeBarrierRemovedExistence(QPoint point);
+    int get_remove_barrier_index();
+    BarrierType ShowRemoveBarrier(PlayerId activePlayer, QPoint point);
+    bool JudgeVictory(PlayerId activePlayer);
 
 signals:
     void singleClickedSignal(QPoint pos, bool clickType);
@@ -61,7 +67,6 @@ signals:
 
 public slots:
 
-
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -70,7 +75,6 @@ protected:
 
 private slots:
     void slotClickTime();
-
 
 private:
     // ui指针
@@ -84,19 +88,15 @@ private:
     // BarrierList
     QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>> Barrier_ui_List;
     // 文字提示
-    TextPrompt* info;
+    TextPrompt *info;
 
     // 使用定时器区分鼠标signalClicked与doubleClicked
-    QTimer* _clickTimer = nullptr;
+    QTimer *_clickTimer = nullptr;
     int _clickCount = 0;    // 点击次数
     QPoint clickedPosition; // 点击位置
 
     // 游戏状态
     GameStatus game_status;
-
 };
 
-
 #endif // VIEW_H
-
-

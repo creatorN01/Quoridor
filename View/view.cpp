@@ -26,11 +26,12 @@ View::View(QWidget *parent)
 // 析构
 View::~View()
 {
+    delete info;
+    delete timer;
     delete ui;
     delete info;
     delete _clickTimer;
 }
-
 
 // 初始化绘制
 void View::initUI()
@@ -87,35 +88,39 @@ void View::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
     QPainter painter(this);
 
-    map->paint(painter, this->width(), this->height());     // map
-    player1->paint(painter, player1->get_pos(), 100, 100);  // player
+    map->paint(painter, this->width(), this->height());    // map
+    player1->paint(painter, player1->get_pos(), 100, 100); // player
     player2->paint(painter, player2->get_pos(), 100, 100);
-    if (arrow->IfNeedToShow())                              // arrow
+    if (arrow->IfNeedToShow()) // arrow
     {
         arrow->paint(painter);
     }
-    if (tempBarrier->IfNeedToShow())                        // tempBarrier
+    if (tempBarrier->IfNeedToShow()) // tempBarrier
     {
         tempBarrier->paint(painter);
     }
-    auto vectorPtr = Barrier_ui_List.data();                // Barrier_ui_List
+    auto vectorPtr = Barrier_ui_List.data(); // Barrier_ui_List
     // qDebug() << vectorPtr->size();
     for (int i = 0; i < (int)vectorPtr->size(); i++)
     {
         (*vectorPtr)[i].get()->paint(painter);
     }
-    info->paint();                                          // info
+    info->paint(); // info
 }
 void View::mousePressEvent(QMouseEvent *event)
 {
     auto touchPoint = event->pos();
     this->clickedPosition = touchPoint;
     // change
-    if (event->button() & Qt::LeftButton) {
-        if (!_clickTimer->isActive()) {
+    if (event->button() & Qt::LeftButton)
+    {
+        if (!_clickTimer->isActive())
+        {
             _clickTimer->start(300);
             _clickCount++;
-        } else {
+        }
+        else
+        {
             _clickCount++;
         }
     }
@@ -123,11 +128,14 @@ void View::mousePressEvent(QMouseEvent *event)
 void View::slotClickTime()
 {
     _clickTimer->stop();
-    if (_clickCount == 1) {
+    if (_clickCount == 1)
+    {
         qDebug() << QStringLiteral("Clicked ONCE");
         qDebug() << this->clickedPosition;
         emit singleClickedSignal(this->clickedPosition, ClickType::LeftSingleClicked);
-    } else if (_clickCount == 2) {
+    }
+    else if (_clickCount == 2)
+    {
         qDebug() << QStringLiteral("Clicked TWICE");
         qDebug() << this->clickedPosition;
         emit doubleClickedSignal(this->clickedPosition, ClickType::LeftDoubleClicked);
@@ -292,6 +300,12 @@ void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction)
 void View::PlaceBarrier_ui()
 {
     Barrier_ui_List.data()->push_back(tempBarrier);
+    if (tempBarrier->get_playerId() == FIRST)
+    {
+        info->decrease_barrier_1();
+    }
+    else
+        info->decrease_barrier_2();
     // 深拷贝
     tempBarrier = QSharedPointer<Barrier_ui>::create();
     // tempBarrier->set_fixed(true);
@@ -301,5 +315,51 @@ void View::PlaceBarrier_ui()
 }
 void View::RemoveBarrier_ui()
 {
+}
 
+bool View::JudgeBarrierRemovedExistence(QPoint point)
+{ // 传入的是修正后的barrier中心点的坐标
+    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    for (int i = 0; i < (int)vectorPtr->size(); i++)
+    {
+        //        qDebug() << "i = " << i;
+        // (*vectorPtr)[i].data()是一个裸指针
+        if ((*vectorPtr)[i]->get_pos() == point)
+        {
+            remove_barrier_index = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+int View::get_remove_barrier_index()
+{ // 获取要删除的barrier下标
+    return this->remove_barrier_index;
+}
+
+BarrierType View::ShowRemoveBarrier(PlayerId activePlayer, QPoint point)
+{
+    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    if ((*vectorPtr)[remove_barrier_index]->get_playerId() == activePlayer)
+    {
+        (*vectorPtr)[remove_barrier_index]->setStyleSheet("border: 2px solid black;");
+    }
+    update();
+
+    QEventLoop loop;
+    QObject::connect(this, SIGNAL(placeBarrierSignal(bool)), &loop, SLOT(quit()));
+    loop.exec();
+    qDebug() << "收到空格信号";
+
+    return (*vectorPtr)[remove_barrier_index]->get_type();
+}
+
+bool View::JudgeVictory(PlayerId activePlayer)
+{ // view层判断是否取得胜利的函数
+    if (activePlayer == FIRST && player1->get_pos().y() == 0)
+        return true;
+    if (activePlayer == SECOND && player2->get_pos().y() == 800)
+        return true;
+    return false;
 }

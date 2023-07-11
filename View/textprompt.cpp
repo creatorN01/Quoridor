@@ -42,15 +42,15 @@ TextPrompt::TextPrompt(QWidget *parent) : QWidget(parent)
     movePromptLabel->setFont(font);
 }
 
-void TextPrompt::get_count_barrier(int count1, int count2) {
-    this->count_barrier_1 = count1;
-    this->count_barrier_2 = count2;
+void TextPrompt::increase_count_round_1() {
+    this->count_round_1++;
 }
-void TextPrompt::get_count_round(int count1, int count2) {
-    this->count_round_1 = count1;
-    this->count_round_2 = count2;
+
+void TextPrompt::increase_count_round_2() {
+    this->count_round_2++;
 }
-void TextPrompt::get_play_id(PlayerId player) {
+
+void TextPrompt::set_play_id(PlayerId player) {
     this->player_id = player;
 }
 
@@ -91,4 +91,12 @@ void TextPrompt::paint() {
     setRemainingBarriers(this->count_barrier_1, this->count_barrier_2);
     setMoveCount(this->count_round_1, this->count_round_2);
     setMovePrompt(this->player_id);
+}
+
+void TextPrompt::decrease_barrier_1() {
+    count_barrier_1--;
+}
+
+void TextPrompt::decrease_barrier_2() {
+    count_barrier_2--;
 }
