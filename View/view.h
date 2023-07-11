@@ -68,6 +68,7 @@ public:
     bool JudgeBarrierRemovedExistence(QPoint point);
     int get_remove_barrier_index();
     BarrierType ShowRemoveBarrier(PlayerId activePlayer, QPoint point);
+    bool JudgeVictory(PlayerId activePlayer);
 
 signals:
     void mySignal(QPoint pos);

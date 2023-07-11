@@ -36,6 +36,8 @@ View::View(QWidget *parent)
 
 View::~View()
 {
+    delete info;
+    delete timer;
     delete ui;
 }
 
@@ -354,4 +356,10 @@ BarrierType View::ShowRemoveBarrier(PlayerId activePlayer, QPoint point) {
     qDebug() << "收到空格信号";
 
     return (*vectorPtr)[remove_barrier_index]->get_type();
+}
+
+bool View::JudgeVictory(PlayerId activePlayer) { // view层判断是否取得胜利的函数
+    if(activePlayer == FIRST && player1->get_pos().y() == 0) return true;
+    if(activePlayer == SECOND && player2->get_pos().y() == 800) return true;
+    return false;
 }
