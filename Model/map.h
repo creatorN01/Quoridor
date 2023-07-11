@@ -18,7 +18,8 @@ public:
     bool Accessible(std::pair<int,int>point_1, std::pair<int,int>point_2);
     bool Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int>point_2);
     bool Add(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int>point_2);
-
+    bool JudgePlaceBarrier(BarrierType bt, std::pair<int,int>point_1, std::pair<int,int>point_2,
+                           std::pair<int,int>point_3, std::pair<int,int>point_4);
 
     void PrintMap();
 

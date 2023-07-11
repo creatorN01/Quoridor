@@ -449,3 +449,27 @@ void Map::PrintMap()
         }
     }
 }
+
+
+bool Map::JudgePlaceBarrier(BarrierType bt, std::pair<int,int>point_1, std::pair<int,int>point_2,
+                            std::pair<int,int>point_3, std::pair<int,int>point_4)
+{
+    /*  1 2
+            3 4   */
+    bool _1_2_accessible = false, _3_4_accessible = false;
+    bool _1_3_accessible = false, _2_4_accessible = false;
+    if(bt == BarrierType::horizontal)
+    {
+        _1_2_accessible = this->Accessible(point_1,point_2);
+        _3_4_accessible = this->Accessible(point_3,point_4);
+        if(_1_2_accessible == false && _3_4_accessible == false) return false;
+        return true;
+    }else
+    {
+        _1_3_accessible = this->Accessible(point_1,point_3);
+        _2_4_accessible = this->Accessible(point_2,point_4);
+        if(_1_3_accessible == false && _2_4_accessible == false) return false;
+        return true;
+    }
+    return false; /*exception*/
+}

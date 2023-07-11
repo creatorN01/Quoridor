@@ -27,6 +27,7 @@ void App::InitGameEnv()
   view->initUI();
 
   QObject::connect(view.data(), SIGNAL(singleClickedSignal(QPoint, bool)), this, SLOT(When_Clicked(QPoint, bool)));
+  QObject::connect(view.data(), SIGNAL(doubleClickedSignal(QPoint, bool)), this, SLOT(When_Clicked(QPoint, bool)));
 
 }
 void App::Run()
@@ -99,7 +100,7 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
   case ActivePlayer:
     qDebug() << "ActivePlayer状态，将进行selectOperation命令";
     // 继续判断是否点击在了ActivePlayer
-    if (clickType == 1)     // 单击
+    if (clickType == ClickType::LeftSingleClicked)     // 单击
     {
         if (view.data()->ClickedInPlayer(curActivePlayer, clickedPosition))
         {
@@ -205,14 +206,14 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         correctPointRemove = view.data()->CorrectBarrierPosition(clickedPosition);
         qDebug() << "修正坐标" << correctPointRemove;
         // 要调用view里面的某一个未实现的函数，来判断这个修正后的坐标上是否有可以删除的障碍
-        // waiting
         if (view.data()->JudgeBarrierRemovedExistence(correctPointRemove) == false)
         {
+            qDebug() << "No Barrier";
             // rollback
             // 弹出提示
         }
+        qDebug() << "Have Barrier";
         // 调用view里面的ShowRemoveBarrier
-        // waiting
         barrierTypeRemove = view.data()->ShowRemoveBarrier(curActivePlayer, correctPointRemove);
         // 设定执行的数据，调整状态机
         pos4_.first = (correctPoint.x() - 300) / 100;
@@ -279,6 +280,17 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         qDebug() << "execPlace2" << "fir" << execPlace2.first << "sec" << execPlace2.second;
         qDebug() << "execPlace3" << "fir" << execPlace3.first << "sec" << execPlace3.second;
         qDebug() << "execPlace4" << "fir" << execPlace4.first << "sec" << execPlace4.second;
+        // 调JudgePlaceBarrier
+        // waiting 没有debug
+        if (Map_->JudgePlaceBarrier(execPlaceBarrierType, execPlace1, execPlace2, execPlace3, execPlace4) == false)
+        {
+            // rollback
+            qDebug() << "NOT";
+        }
+        else
+        {
+            qDebug() << "Yes";
+        }
         // 这里还需要调用judgeSolution函数
         // waiting
         // 先修改model层的数据
@@ -314,12 +326,11 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
             Map_->Add(curActivePlayer, execPlace1, execPlace2);
             Map_->Add(curActivePlayer, execPlace3, execPlace4);
         }
-
+        qDebug() << "跳出add";
         // 再修改viewModel层的数据————无
         // 最后修改view层的数据
-        // view要改什么东西？消除Barrier、文字提示的更新、Barrier_ui_List的删除
-        // my todo
         view->RemoveBarrier_ui();
+
         stateMachine->SetActivePlayerCommand();
         break;
     }

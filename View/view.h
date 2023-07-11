@@ -56,14 +56,15 @@ public:
 
     bool JudgeBarrierRemovedExistence(QPoint point);
     int get_remove_barrier_index();
-    BarrierType ShowRemoveBarrier(PlayerId activePlayer, QPoint point);
+    // BarrierType ShowRemoveBarrier(PlayerId activePlayer, QPoint point);
     bool JudgeVictory(PlayerId activePlayer);
 
 signals:
     void singleClickedSignal(QPoint pos, bool clickType);
     void doubleClickedSignal(QPoint pos, bool clickType);
     void keyPressSignal(Direction direction);
-    void placeBarrierSignal(bool fixed);
+    void BarrierSignal(bool fixed);
+
 
 public slots:
 
@@ -89,6 +90,8 @@ private:
     QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>> Barrier_ui_List;
     // 文字提示
     TextPrompt *info;
+    // 墓碑障碍
+    int remove_barrier_index;
 
     // 使用定时器区分鼠标signalClicked与doubleClicked
     QTimer *_clickTimer = nullptr;

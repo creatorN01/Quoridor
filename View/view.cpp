@@ -26,8 +26,7 @@ View::View(QWidget *parent)
 // 析构
 View::~View()
 {
-    delete info;
-    delete timer;
+    // delete info;
     delete ui;
     delete info;
     delete _clickTimer;
@@ -159,7 +158,7 @@ void View::keyPressEvent(QKeyEvent *event)
         emit keyPressSignal(Right);
         break;
     case Qt::Key_Space:
-        emit placeBarrierSignal(true);
+        emit BarrierSignal(true);
         break;
     }
 }
@@ -232,13 +231,37 @@ BarrierType View::ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type)
 
     // 故技重施
     QEventLoop loop;
-    QObject::connect(this, SIGNAL(placeBarrierSignal(bool)), tempBarrier.data(), SLOT(set_fixed(bool)));
-    QObject::connect(this, SIGNAL(placeBarrierSignal(bool)), &loop, SLOT(quit()));
+    QObject::connect(this, SIGNAL(BarrierSignal(bool)), tempBarrier.data(), SLOT(set_fixed(bool)));
+    QObject::connect(this, SIGNAL(BarrierSignal(bool)), &loop, SLOT(quit()));
 
     loop.exec();
     qDebug() << "收到空格信号";
     return this->tempBarrier->get_type();
 }
+
+BarrierType View::ShowRemoveBarrier(PlayerId activePlayer, QPoint point)
+{
+    qDebug() << "View::ShowRemoveBarrier";
+    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    if ((*vectorPtr)[remove_barrier_index]->get_playerId() == activePlayer)
+    {
+        (*vectorPtr)[remove_barrier_index]->setStyleSheet("border: 2px solid black;");
+        qDebug() << "找到要remove的barrier";
+    }
+    qDebug() << "update()";
+    update();
+
+    QEventLoop loop;
+    QObject::connect(this, SIGNAL(BarrierSignal(bool)), &loop, SLOT(quit()));
+    loop.exec();
+    qDebug() << "ShowRemoveBarrier收到空格信号";
+
+    return (*vectorPtr)[remove_barrier_index]->get_type();
+}
+
+
+
+
 
 // view层面的执行函数
 void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction)
@@ -315,6 +338,20 @@ void View::PlaceBarrier_ui()
 }
 void View::RemoveBarrier_ui()
 {
+    qDebug() << "View::RemoveBarrier_ui";
+    // 消除Barrier、文字提示的更新、Barrier_ui_List的删除
+    // swap
+    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    int size = (int)(vectorPtr->size());
+    auto temp = (*vectorPtr)[remove_barrier_index];
+    (*vectorPtr)[remove_barrier_index] = (*vectorPtr)[size - 1];
+    (*vectorPtr)[size - 1] = temp;
+    // pop_back
+    (*vectorPtr).pop_back();
+    // 重绘
+    qDebug() << "after swap and pop";
+    qDebug() << "update()";
+    update();
 }
 
 bool View::JudgeBarrierRemovedExistence(QPoint point)
@@ -338,22 +375,7 @@ int View::get_remove_barrier_index()
     return this->remove_barrier_index;
 }
 
-BarrierType View::ShowRemoveBarrier(PlayerId activePlayer, QPoint point)
-{
-    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
-    if ((*vectorPtr)[remove_barrier_index]->get_playerId() == activePlayer)
-    {
-        (*vectorPtr)[remove_barrier_index]->setStyleSheet("border: 2px solid black;");
-    }
-    update();
 
-    QEventLoop loop;
-    QObject::connect(this, SIGNAL(placeBarrierSignal(bool)), &loop, SLOT(quit()));
-    loop.exec();
-    qDebug() << "收到空格信号";
-
-    return (*vectorPtr)[remove_barrier_index]->get_type();
-}
 
 bool View::JudgeVictory(PlayerId activePlayer)
 { // view层判断是否取得胜利的函数

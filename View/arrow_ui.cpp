@@ -2,7 +2,7 @@
 #include "arrow_ui.h"
 #include "qpainter.h"
 
-Arrow_ui::Arrow_ui(QPoint point_, bool needtoShow_, QWidget *parent) : point(point_), needtoShow(needtoShow_), QWidget(parent)
+Arrow_ui::Arrow_ui(QWidget *parent, QPoint point_, bool needtoShow_) : point(point_), needtoShow(needtoShow_), QWidget(parent)
 {
     qDebug() << "调用Arrow_ui::Arrow_ui";
     img_arrow_up.load("://images//GameKit//arrow_up.png");

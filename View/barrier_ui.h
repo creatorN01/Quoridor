@@ -14,7 +14,7 @@ class Barrier_ui : public QWidget
 public:
     explicit Barrier_ui(QWidget *parent = nullptr);
 
-    ~Barrier_ui(){qDebug() << "析构------------------------------------------------------";}
+    ~Barrier_ui(){qDebug() << "Barrier_ui析构------------------------------------------------------";}
 
 
     void paint(QPainter &painter);

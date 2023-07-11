@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     App app;
     app.InitGameEnv();
     app.Run();
-
+    qDebug() << "跳出Run()";
 
     return a.exec();
 }
