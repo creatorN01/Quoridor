@@ -321,3 +321,37 @@ void View::PlaceBarrier_ui()
     // 文字提示变更（待定）
     update();
 }
+
+bool View::JudgeBarrierRemovedExistence(QPoint point) { // 传入的是修正后的barrier中心点的坐标
+    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    for (int i = 0; i < (int)vectorPtr->size(); i++)
+    {
+//        qDebug() << "i = " << i;
+        // (*vectorPtr)[i].data()是一个裸指针
+        if((*vectorPtr)[i]->get_pos() == point) {
+            remove_barrier_index = i;
+            return true;
+        }
+
+    }
+    return false;
+}
+
+int View::get_remove_barrier_index() { // 获取要删除的barrier下标
+    return this->remove_barrier_index;
+}
+
+BarrierType View::ShowRemoveBarrier(PlayerId activePlayer, QPoint point) {
+    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    if((*vectorPtr)[remove_barrier_index]->get_playerId() == activePlayer) {
+        (*vectorPtr)[remove_barrier_index]->setStyleSheet("border: 2px solid black;");
+    }
+    update();
+
+    QEventLoop loop;
+    QObject::connect(this, SIGNAL(placeBarrierSignal(bool)), &loop, SLOT(quit()));
+    loop.exec();
+    qDebug() << "收到空格信号";
+
+    return (*vectorPtr)[remove_barrier_index]->get_type();
+}

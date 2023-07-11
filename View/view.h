@@ -65,6 +65,10 @@ public:
     Direction GetDirectionFromKeyboard();
     void MoveActivePlayerPos(PlayerId activePlayer, Direction direction);
     void PlaceBarrier_ui();
+    bool JudgeBarrierRemovedExistence(QPoint point);
+    int get_remove_barrier_index();
+    BarrierType ShowRemoveBarrier(PlayerId activePlayer, QPoint point);
+
 signals:
     void mySignal(QPoint pos);
     void keyPressSignal(Direction direction);
@@ -89,6 +93,7 @@ private:
     QSharedPointer<Player_ui> player2;
     QSharedPointer<Arrow_ui> arrow;
     QSharedPointer<Barrier_ui> tempBarrier;
+    int remove_barrier_index;
     // 一些文字提示（待完成）
     TextPrompt* info;
     // ...
