@@ -216,14 +216,19 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         // 调用view里面的ShowRemoveBarrier
         barrierTypeRemove = view.data()->ShowRemoveBarrier(curActivePlayer, correctPointRemove);
         // 设定执行的数据，调整状态机
-        pos4_.first = (correctPoint.x() - 300) / 100;
-        pos4_.second = correctPoint.y() / 100;
+        pos4_.first = (correctPointRemove.x() - 300) / 100;
+        pos4_.second = correctPointRemove.y() / 100;
         pos1_.first = pos4_.first - 1;
         pos1_.second = pos4_.second - 1;
         pos2_.first = pos4_.first;
         pos2_.second = pos4_.second - 1;
         pos3_.first = pos4_.first - 1;
         pos3_.second = pos4_.second;
+        qDebug() << "RemoveBarrier四个点的index";
+        qDebug() << "fir" << pos1_.first << "sec" << pos1_.second;
+        qDebug() << "fir" << pos2_.first << "sec" << pos2_.second;
+        qDebug() << "fir" << pos3_.first << "sec" << pos3_.second;
+        qDebug() << "fir" << pos4_.first << "sec" << pos4_.second;
         stateMachine->SetRemoveBarrierExecInfo(barrierTypeRemove, pos1_, pos2_, pos3_, pos4_);
         stateMachine->SelectPositionCommand();
         // 递归调用，这时候就去到了AtomicExecute
@@ -314,6 +319,10 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         break;
       case RemoveBarrier:
         qDebug() << "ExecuteRemoveBarrier";
+        qDebug() << "execPlace1" << "fir" << execPlace1.first << "sec" << execPlace1.second;
+        qDebug() << "execPlace2" << "fir" << execPlace2.first << "sec" << execPlace2.second;
+        qDebug() << "execPlace3" << "fir" << execPlace3.first << "sec" << execPlace3.second;
+        qDebug() << "execPlace4" << "fir" << execPlace4.first << "sec" << execPlace4.second;
         // 先修改model层的数据
         // waiting 还没有debug
         if (execPlaceBarrierType == BarrierType::horizontal)    // 水平

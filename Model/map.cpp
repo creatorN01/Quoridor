@@ -300,6 +300,10 @@ bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int
     qDebug() << "Map::Remove" ;
     qDebug() << "point_1" << " fir " << x_1 << " sec " << y_1;
     qDebug() << "point_2" << " fir " << x_2 << " sec " << y_2;
+        if (x_1 < 0 || x_1 >= MAPSIZE || y_1 < 0 || y_1 >= MAPSIZE) /*point_1 out of range*/
+            return false;
+        if (x_2 < 0 || x_2 >= MAPSIZE || y_2 < 0 || y_2 >= MAPSIZE) /*point_2 out of range*/
+            return false;
     if(x_1 == x_2)/*竖着的杆子*/
     {
         if(y_1 < y_2)/*point_1 | point_2*/
@@ -372,10 +376,18 @@ bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int
 /*remove barrier and add edge*/
 bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int>point_2)
 {
-    int y_1 = point_1.first;
-    int x_1 = point_1.second;
-    int y_2 = point_2.first;
-    int x_2 = point_2.second;
+//    int y_1 = point_1.first;
+//    int x_1 = point_1.second;
+//    int y_2 = point_2.first;
+//    int x_2 = point_2.second;
+
+    int y_1 = point_1.second;
+    int x_1 = point_1.first;
+    int y_2 = point_2.second;
+    int x_2 = point_2.first;
+    qDebug() << "Map::Add" ;
+    qDebug() << "point_1" << " fir " << x_1 << " sec " << y_1;
+    qDebug() << "point_2" << " fir " << x_2 << " sec " << y_2;
     if (y_1 == y_2)/*竖着的杆子*/
     {
         if (x_1 < x_2)/*point_1 | point_2*/
