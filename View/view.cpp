@@ -385,3 +385,13 @@ bool View::JudgeVictory(PlayerId activePlayer)
         return true;
     return false;
 }
+
+void View::increase_text_round_1() {
+    info->increase_count_round_1();
+}
+void View::increase_text_round_2() {
+    info->increase_count_round_2();
+}
+void View::set_text_player(PlayerId player) {
+    info->set_play_id(player);
+}

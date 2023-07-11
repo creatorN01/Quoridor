@@ -276,6 +276,18 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
             }
 
         }
+
+        //修改界面信息
+        if(curActivePlayer == FIRST) {
+            view->increase_text_round_1();
+            view->set_text_player(SECOND);
+        }
+        else {
+            view->increase_text_round_2();
+            view->set_text_player(FIRST);
+        }
+
+
         // 设置状态机，进入后手的ActivePlayer状态
         stateMachine->SetActivePlayerCommand();
         break;
@@ -314,6 +326,17 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         // 最后修改view层的数据
         // view要改什么东西？画Barrier、文字提示的更新、vector<> Barrier_ui_List
         view->PlaceBarrier_ui();
+
+        //修改界面信息
+        if(curActivePlayer == FIRST) {
+            view->increase_text_round_1();
+            view->set_text_player(SECOND);
+        }
+        else {
+            view->increase_text_round_2();
+            view->set_text_player(FIRST);
+        }
+
         // 设置状态机，进入后手的ActivePlayer状态
         stateMachine->SetActivePlayerCommand();
         break;
@@ -339,6 +362,16 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         // 再修改viewModel层的数据————无
         // 最后修改view层的数据
         view->RemoveBarrier_ui();
+
+        //修改界面信息
+        if(curActivePlayer == FIRST) {
+            view->increase_text_round_1();
+            view->set_text_player(SECOND);
+        }
+        else {
+            view->increase_text_round_2();
+            view->set_text_player(FIRST);
+        }
 
         stateMachine->SetActivePlayerCommand();
         break;
