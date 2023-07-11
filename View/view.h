@@ -18,6 +18,14 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
 QT_END_NAMESPACE
 
+class myClass{
+public:
+    myClass(){qDebug() << "myClass()调用构造............................................";}
+    ~myClass(){qDebug() << "~myClass()调用析构............................................";}
+};
+
+
+
 
 class Commands
 {
@@ -86,12 +94,14 @@ private:
     // ...
     // 初步觉得用一个vector存，后期如果有不方便的地方，可以再调整，换成map什么的
     QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>> Barrier_ui_List;
+    QSharedPointer<myClass> test;
 
     QTimer* timer;
     // int curFrame; // 用于绘制地图，记录帧数
     GameStatus game_status; // 游戏状态
 
 };
+
 
 #endif // VIEW_H
 

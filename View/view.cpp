@@ -7,8 +7,6 @@
 #include <QProcess>
 #include <QPainter>
 
-int counttt = 0;
-
 View::View(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::View), timer(new QTimer(this)) // 定时器
       ,
@@ -19,6 +17,10 @@ View::View(QWidget *parent)
     player2 = QSharedPointer<Player_ui>::create(PlayerId::SECOND, this);
     map = QSharedPointer<Map_ui>::create(this);
     Barrier_ui_List = QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>>::create();
+
+    test = QSharedPointer<myClass>::create();
+
+
     QPoint point(0, 0);
     arrow = QSharedPointer<Arrow_ui>::create(point, false, this);
     tempBarrier = QSharedPointer<Barrier_ui>::create(this);
@@ -70,7 +72,6 @@ void View::initUI()
 
 void View::paintEvent(QPaintEvent *event)
 {
-    qDebug() << "yiciyiciyiciyici    " << counttt++;
     Q_UNUSED(event);
     QPainter painter(this);
 
@@ -98,10 +99,29 @@ void View::paintEvent(QPaintEvent *event)
 
     // 画 Barrier_ui_List
     // qDebug() << "Barrier_ui_List.data()  size: " << (*(Barrier_ui_List.data())).size();//vector.size
-    for (auto barrier_ : *(Barrier_ui_List.data()))
+    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    // qDebug() << vectorPtr->size();
+    // (*vectorPtr)
+    for (int i = 0; i < (int)vectorPtr->size(); i++)
     {
-        barrier_->paint(painter);
+        qDebug() << "i = " << i;
+        // (*vectorPtr)[i].data()是一个裸指针
+        (*vectorPtr)[i].get()->paint(painter);
+
     }
+
+//    for (std::vector<QSharedPointer<Barrier_ui>>::iterator it = (*vectorPtr).begin(); it != (*vectorPtr).end(); it++)
+//    {
+//        // qDebug() << "+1";
+//        // painter.save();
+//        (*it).data()->paint(painter);
+//        // painter.restore();
+//    }
+
+//    for (auto barrier_ : *(Barrier_ui_List.data()))
+//    {
+//        barrier_->paint(painter);
+//    }
 
     info->paint();
 }
@@ -290,6 +310,12 @@ void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction)
 void View::PlaceBarrier_ui()
 {
     Barrier_ui_List.data()->push_back(tempBarrier);
+    if(tempBarrier->get_playerId() == FIRST) {
+        info->decrease_barrier_1();
+    }
+    else info->decrease_barrier_2();
+    // 深拷贝
+    tempBarrier = QSharedPointer<Barrier_ui>::create();
     // tempBarrier->set_fixed(true);
     tempBarrier->set_needToShow(false);
     // 文字提示变更（待定）
