@@ -18,67 +18,59 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
 QT_END_NAMESPACE
 
-class myClass{
-public:
-    myClass(){qDebug() << "myClass()调用构造............................................";}
-    ~myClass(){qDebug() << "~myClass()调用析构............................................";}
-};
-
-
-
-
-class Commands
-{
-public:
-    Commands()
-    {
-
-    }
-public:
-    // 执行程序
-    virtual void exec() = 0;
-};
+class QTimer;
 
 class View : public QMainWindow
 {
     Q_OBJECT
 
 public:
+
     explicit View(QWidget *parent = nullptr);
     ~View();
 
-    void set_game_status_command(QSharedPointer<Commands>);
-    void set_move_command(QSharedPointer<Commands>);
+    // 接口
+    void set_game_status(GameStatus status){this->game_status = status;}
+    GameStatus get_game_status(){return this->game_status;}
 
-//    void set_get_ice_pos(const std::function<QPoint(void)>&&);
-//    void set_get_fire_pos(const std::function<QPoint(void)>&&);
-
-    // 信号和槽等到第一轮迭代开始时，再写~
-
-
-    void initUI();                      // 初始化绘制
+    // 用于判断与修正
     bool ClickedInMap(QPoint point);
     bool ClickedInPlayer(PlayerId activePlayer, QPoint point);
     QPoint CorrectBarrierPosition(QPoint point);
+
+    // 初始化绘制
+    void initUI();
+
+    // 重绘并提供执行数据
     void ShowArrowAround(QPoint point);
     BarrierType ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type);
     Direction GetDirectionFromKeyboard();
+    BarrierType ShowRemoveBarrier(PlayerId activePlayer, QPoint point);
+
+    // view层面的执行函数
     void MoveActivePlayerPos(PlayerId activePlayer, Direction direction);
     void PlaceBarrier_ui();
+    void RemoveBarrier_ui();
+
+
 signals:
-    void mySignal(QPoint pos);
+    void singleClickedSignal(QPoint pos, bool clickType);
+    void doubleClickedSignal(QPoint pos, bool clickType);
     void keyPressSignal(Direction direction);
     void placeBarrierSignal(bool fixed);
 
-// public slots:
-    void react_game_status_change(const GameStatus &status); // 接收游戏状态改变的信号
-//public slots:
-//    void test(QPoint clickedPosition);
+public slots:
+
+
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void mousePressEvent(QMouseEvent *e) override;
+    void mousePressEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+
+private slots:
+    void slotClickTime();
+
 
 private:
     // ui指针
@@ -89,16 +81,18 @@ private:
     QSharedPointer<Player_ui> player2;
     QSharedPointer<Arrow_ui> arrow;
     QSharedPointer<Barrier_ui> tempBarrier;
-    // 一些文字提示（待完成）
-    TextPrompt* info;
-    // ...
-    // 初步觉得用一个vector存，后期如果有不方便的地方，可以再调整，换成map什么的
+    // BarrierList
     QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>> Barrier_ui_List;
-    QSharedPointer<myClass> test;
+    // 文字提示
+    TextPrompt* info;
 
-    QTimer* timer;
-    // int curFrame; // 用于绘制地图，记录帧数
-    GameStatus game_status; // 游戏状态
+    // 使用定时器区分鼠标signalClicked与doubleClicked
+    QTimer* _clickTimer = nullptr;
+    int _clickCount = 0;    // 点击次数
+    QPoint clickedPosition; // 点击位置
+
+    // 游戏状态
+    GameStatus game_status;
 
 };
 

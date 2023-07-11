@@ -104,6 +104,14 @@ void StateMachine::SetPlaceBarrierExecInfo(BarrierType type_, std::pair<int, int
     curNode->SetBarrierType(type_);
     curNode->SetPlaceBarrierPos(pos1, pos2, pos3, pos4);
 }
+void StateMachine::SetRemoveBarrierExecInfo(BarrierType type_, std::pair<int, int> pos1, std::pair<int, int> pos2, std::pair<int, int> pos3, std::pair<int, int> pos4)
+{
+    auto tran = this->nodeList[AtomicExecute].get();
+    auto curNode = static_cast<AtomicExecuteStateNode *>(tran);
+    curNode->SetBarrierType(type_);
+    curNode->SetPlaceBarrierPos(pos1, pos2, pos3, pos4);
+}
+
 
 
 bool StateMachine::RollbackCommand()

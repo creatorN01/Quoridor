@@ -2,6 +2,13 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+enum ClickType
+{
+    LeftDoubleClicked = 0,
+    LeftSingleClicked = 1
+};
+
+
 enum Accessibility
 {
     PASSABLE = 1,

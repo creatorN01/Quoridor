@@ -27,7 +27,7 @@ public:
 
     // 收到鼠标点击信号后触发的槽函数，传入鼠标点击的具体位置
 public slots:
-    void When_Clicked(QPoint clickedPosition);
+    void When_Clicked(QPoint clickedPosition, bool clickType);
 
     // connect(view.get(), SIGNAL(mySignal(QPoint pos)), this, SLOT(When_Clicked(QPoint clickedPosition)));
 private:

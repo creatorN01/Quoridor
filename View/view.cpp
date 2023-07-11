@@ -6,43 +6,37 @@
 #include <QPushButton>
 #include <QProcess>
 #include <QPainter>
-
+// 构造，跟随App::App()执行，智能指针
 View::View(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::View), timer(new QTimer(this)) // 定时器
-      ,
-      game_status(INIT)
+    : QMainWindow(parent), ui(new Ui::View), _clickTimer(new QTimer(this)), game_status(INIT)
 {
+    // 初始化
     ui->setupUi(this);
+    map = QSharedPointer<Map_ui>::create(this);
     player1 = QSharedPointer<Player_ui>::create(PlayerId::FIRST, this);
     player2 = QSharedPointer<Player_ui>::create(PlayerId::SECOND, this);
-    map = QSharedPointer<Map_ui>::create(this);
-    Barrier_ui_List = QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>>::create();
-
-    test = QSharedPointer<myClass>::create();
-
-
-    QPoint point(0, 0);
-    arrow = QSharedPointer<Arrow_ui>::create(point, false, this);
+    arrow = QSharedPointer<Arrow_ui>::create(this);
     tempBarrier = QSharedPointer<Barrier_ui>::create(this);
+    Barrier_ui_List = QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>>::create();
     info = new TextPrompt(this);
-    // const int GAP = 1; // 每隔0.001秒触发一次槽函数move
-    // timer->start(GAP);
-    // connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-    // 如果完全贴合图片大小，某些屏幕上可能显示不全
-    this->setFixedSize(1500, 900);
 
-    // connect(this, SIGNAL(mySignal(QPoint)), this, SLOT(test(QPoint)));
+    // 连接信号和槽
+    connect(_clickTimer, SIGNAL(timeout()), this, SLOT(slotClickTime()));
 }
-
+// 析构
 View::~View()
 {
     delete ui;
+    delete info;
+    delete _clickTimer;
 }
 
-// ...
 
+// 初始化绘制
 void View::initUI()
 {
+    // 设置尺寸
+    this->setFixedSize(1500, 900);
     // 初始化玩家坐标
     QPoint point1(700, 800);
     QPoint point2(700, 0);
@@ -54,6 +48,9 @@ void View::initUI()
     // qDebug() << "after initUI";
     // qDebug() << "player1: " << player1->get_pos().x() << "," << player1->get_pos().y();
     // qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
+
+    // 设置游戏状态为PLAYING
+    game_status = PLAYING;
 
     // 创建布局管理器
     QVBoxLayout *layout = new QVBoxLayout();
@@ -69,76 +66,13 @@ void View::initUI()
     // 强制重绘
     update();
 }
-
-void View::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-    QPainter painter(this);
-
-    // 绘制地图
-    map->paint(painter, this->width(), this->height());
-
-    // 绘制玩家
-    player1->paint(painter, player1->get_pos(), 100, 100);
-    player2->paint(painter, player2->get_pos(), 100, 100);
-
-    // 如果需要的话，要绘制arrow
-    if (arrow->IfNeedToShow())
-    {
-        arrow->paint(painter);
-    }
-    else
-    {
-    }
-
-    // 如果需要画tempBarrier的话
-    if (tempBarrier->getIfNeedToShow())
-    {
-        tempBarrier->paint(painter);
-    }
-
-    // 画 Barrier_ui_List
-    // qDebug() << "Barrier_ui_List.data()  size: " << (*(Barrier_ui_List.data())).size();//vector.size
-    std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
-    // qDebug() << vectorPtr->size();
-    // (*vectorPtr)
-    for (int i = 0; i < (int)vectorPtr->size(); i++)
-    {
-        qDebug() << "i = " << i;
-        // (*vectorPtr)[i].data()是一个裸指针
-        (*vectorPtr)[i].get()->paint(painter);
-
-    }
-
-//    for (std::vector<QSharedPointer<Barrier_ui>>::iterator it = (*vectorPtr).begin(); it != (*vectorPtr).end(); it++)
-//    {
-//        // qDebug() << "+1";
-//        // painter.save();
-//        (*it).data()->paint(painter);
-//        // painter.restore();
-//    }
-
-//    for (auto barrier_ : *(Barrier_ui_List.data()))
-//    {
-//        barrier_->paint(painter);
-//    }
-
-    info->paint();
-}
-
-void View::mousePressEvent(QMouseEvent *e)
-{
-    // qDebug() << "hello";
-    auto touchPoint = e->pos();
-    qDebug() << touchPoint;
-
-    // qDebug() << "准备emit";
-    emit mySignal(touchPoint);
-    // qDebug() << "emit信号";
-}
-
 void View::wheelEvent(QWheelEvent *event)
 {
+    // tempBarrier is fixed
+    if (tempBarrier->IfFixed())
+    {
+        return;
+    }
     qDebug() << "wheelEvent";
     auto type = this->tempBarrier->get_type();
     if (type == BarrierType::horizontal)
@@ -148,7 +82,58 @@ void View::wheelEvent(QWheelEvent *event)
     this->tempBarrier->set_type(type);
     update();
 }
+void View::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter painter(this);
 
+    map->paint(painter, this->width(), this->height());     // map
+    player1->paint(painter, player1->get_pos(), 100, 100);  // player
+    player2->paint(painter, player2->get_pos(), 100, 100);
+    if (arrow->IfNeedToShow())                              // arrow
+    {
+        arrow->paint(painter);
+    }
+    if (tempBarrier->IfNeedToShow())                        // tempBarrier
+    {
+        tempBarrier->paint(painter);
+    }
+    auto vectorPtr = Barrier_ui_List.data();                // Barrier_ui_List
+    // qDebug() << vectorPtr->size();
+    for (int i = 0; i < (int)vectorPtr->size(); i++)
+    {
+        (*vectorPtr)[i].get()->paint(painter);
+    }
+    info->paint();                                          // info
+}
+void View::mousePressEvent(QMouseEvent *event)
+{
+    auto touchPoint = event->pos();
+    this->clickedPosition = touchPoint;
+    // change
+    if (event->button() & Qt::LeftButton) {
+        if (!_clickTimer->isActive()) {
+            _clickTimer->start(300);
+            _clickCount++;
+        } else {
+            _clickCount++;
+        }
+    }
+}
+void View::slotClickTime()
+{
+    _clickTimer->stop();
+    if (_clickCount == 1) {
+        qDebug() << QStringLiteral("Clicked ONCE");
+        qDebug() << this->clickedPosition;
+        emit singleClickedSignal(this->clickedPosition, ClickType::LeftSingleClicked);
+    } else if (_clickCount == 2) {
+        qDebug() << QStringLiteral("Clicked TWICE");
+        qDebug() << this->clickedPosition;
+        emit doubleClickedSignal(this->clickedPosition, ClickType::LeftDoubleClicked);
+    }
+    _clickCount = 0;
+}
 void View::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key())
@@ -170,7 +155,7 @@ void View::keyPressEvent(QKeyEvent *event)
         break;
     }
 }
-
+// 用于判断与修正
 bool View::ClickedInMap(QPoint point)
 {
     if (point.x() >= 300 && point.x() <= 1200 && point.y() >= 0 && point.y() <= 900)
@@ -178,7 +163,6 @@ bool View::ClickedInMap(QPoint point)
     else
         return false;
 }
-
 bool View::ClickedInPlayer(PlayerId activePlayer, QPoint point)
 {
     if (activePlayer == FIRST)
@@ -197,7 +181,6 @@ bool View::ClickedInPlayer(PlayerId activePlayer, QPoint point)
     }
     return false;
 }
-
 QPoint View::CorrectBarrierPosition(QPoint point)
 {
     point.setX(int((point.x() + 50) / 100) * 100);
@@ -205,9 +188,10 @@ QPoint View::CorrectBarrierPosition(QPoint point)
     return point;
 }
 
+// 重绘并提供执行数据
 void View::ShowArrowAround(QPoint point)
 {
-    qDebug() << "ShowArrowAround调用";
+    qDebug() << "View::ShowArrowAround()";
     this->arrow->setIfNeedToShow(true);
     this->arrow->setPoint(point);
     //    arrow = QSharedPointer<Arrow_ui>::create(point);
@@ -215,10 +199,23 @@ void View::ShowArrowAround(QPoint point)
     //    arrow.data()->update();
     update();
 }
+Direction View::GetDirectionFromKeyboard()
+{
+    // 创建一个事件循环
+    QEventLoop loop;
+    // 连接键盘信号到事件循环的退出槽函数
+    QObject::connect(this, SIGNAL(keyPressSignal(Direction)), arrow.data(), SLOT(setDirection(Direction)));
+    QObject::connect(this, SIGNAL(keyPressSignal(Direction)), &loop, SLOT(quit()));
 
+    // 等待键盘信号
+    loop.exec();
+    // 接收到键盘信号
+    qDebug() << "收到键盘信号";
+    return this->arrow->getDirection();
+}
 BarrierType View::ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type)
 {
-    qDebug() << "ShowPossibleBarrier调用";
+    qDebug() << "View::ShowPossibleBarrier()";
     this->tempBarrier->set_playerId(id);
     this->tempBarrier->set_pos(pos);
     this->tempBarrier->set_needToShow(true);
@@ -235,21 +232,7 @@ BarrierType View::ShowPossibleBarrier(PlayerId id, QPoint pos, BarrierType type)
     return this->tempBarrier->get_type();
 }
 
-Direction View::GetDirectionFromKeyboard()
-{
-    // 创建一个事件循环
-    QEventLoop loop;
-    // 连接键盘信号到事件循环的退出槽函数
-    QObject::connect(this, SIGNAL(keyPressSignal(Direction)), arrow.data(), SLOT(setDirection(Direction)));
-    QObject::connect(this, SIGNAL(keyPressSignal(Direction)), &loop, SLOT(quit()));
-
-    // 等待键盘信号
-    loop.exec();
-    // 接收到键盘信号
-    qDebug() << "收到键盘信号";
-    return this->arrow->getDirection();
-}
-
+// view层面的执行函数
 void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction)
 {
     // qDebug() << "player1: " << player1->x() << "," << player1->y();
@@ -306,7 +289,6 @@ void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction)
     // qDebug() << "player2: " << player2->get_pos().x() << "," << player2->get_pos().y();
     update();
 }
-
 void View::PlaceBarrier_ui()
 {
     Barrier_ui_List.data()->push_back(tempBarrier);
@@ -316,4 +298,8 @@ void View::PlaceBarrier_ui()
     tempBarrier->set_needToShow(false);
     // 文字提示变更（待定）
     update();
+}
+void View::RemoveBarrier_ui()
+{
+
 }

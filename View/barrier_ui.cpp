@@ -76,7 +76,7 @@ BarrierType& Barrier_ui::get_type() {
     return this->type;
 }
 
-bool Barrier_ui::getIfNeedToShow()
+bool Barrier_ui::IfNeedToShow()
 {
     return this->ifNeedtoShow;
 }

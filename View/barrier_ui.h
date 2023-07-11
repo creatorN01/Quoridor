@@ -23,10 +23,12 @@ public:
     void set_type(const BarrierType& type);
     void set_needToShow(const bool need){this->ifNeedtoShow = need;}
     void set_fixed(const bool fixed){this->ifFixed = fixed;}
+
     QPoint& get_pos();
     PlayerId& get_playerId();
     BarrierType& get_type();
-    bool getIfNeedToShow();
+    bool IfNeedToShow();
+    bool IfFixed(){return this->ifFixed;}
 
 private:
     // 四种图像作为静态成员存储更合适一些，所有的对象共用一份
