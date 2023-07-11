@@ -24,11 +24,15 @@ Barrier_ui::Barrier_ui(QWidget *parent)
 }
 
 void Barrier_ui::paint(QPainter &painter) {
+    // qDebug() << "......";
     const int width = 200;
     const int height = 20;
     QPoint pos = this->get_pos();
     PlayerId id = this->get_playerId();
     auto type = this->get_type();
+    // qDebug() << "pos = " << pos;
+    // qDebug() << "id = " << id;
+    // qDebug() << "type = " << type;
 //    int correctX = pos.x()
     if(id == FIRST) {
         if(type == horizontal){//横

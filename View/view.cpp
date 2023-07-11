@@ -100,13 +100,23 @@ void View::paintEvent(QPaintEvent *event)
     // 画 Barrier_ui_List
     // qDebug() << "Barrier_ui_List.data()  size: " << (*(Barrier_ui_List.data())).size();//vector.size
     std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
+    // qDebug() << vectorPtr->size();
     // (*vectorPtr)
-    for (std::vector<QSharedPointer<Barrier_ui>>::iterator it = (*vectorPtr).begin(); it != (*vectorPtr).end(); it++)
+    for (int i = 0; i < (int)vectorPtr->size(); i++)
     {
-        painter.save();
-        (*it).data()->paint(painter);
-        // painter.restore();
+        qDebug() << "i = " << i;
+        // (*vectorPtr)[i].data()是一个裸指针
+        (*vectorPtr)[i].get()->paint(painter);
+
     }
+
+//    for (std::vector<QSharedPointer<Barrier_ui>>::iterator it = (*vectorPtr).begin(); it != (*vectorPtr).end(); it++)
+//    {
+//        // qDebug() << "+1";
+//        // painter.save();
+//        (*it).data()->paint(painter);
+//        // painter.restore();
+//    }
 
 //    for (auto barrier_ : *(Barrier_ui_List.data()))
 //    {
@@ -300,6 +310,8 @@ void View::MoveActivePlayerPos(PlayerId activePlayer, Direction direction)
 void View::PlaceBarrier_ui()
 {
     Barrier_ui_List.data()->push_back(tempBarrier);
+    // 深拷贝
+    tempBarrier = QSharedPointer<Barrier_ui>::create();
     // tempBarrier->set_fixed(true);
     tempBarrier->set_needToShow(false);
     // 文字提示变更（待定）
