@@ -10,8 +10,7 @@ Arrow_ui::Arrow_ui(QWidget *parent, QPoint point_, bool needtoShow_) : point(poi
     img_arrow_left.load("://images//GameKit//arrow_left.png");
     img_arrow_right.load("://images//GameKit//arrow_right.png");
 
-//    this->point = point_;
-//    this->needtoShow = needtoShow_;
+
 }
 
 QPoint Arrow_ui::getPoint()
@@ -43,10 +42,3 @@ void Arrow_ui::paint(QPainter &painter)
 
 }
 
-//void Arrow_ui::paintEvent(QPaintEvent *event)
-//{
-//    qDebug() << "调用Arrow_ui::paintEvent";
-//    Q_UNUSED(event);
-//    QPainter painter(this);
-
-//}

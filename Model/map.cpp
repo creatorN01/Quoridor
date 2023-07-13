@@ -372,10 +372,14 @@ bool Map::Remove(PlayerId player_id,std::pair<int,int>point_1 ,std::pair<int,int
 /*remove barrier and add edge*/
 bool Map::Add(PlayerId player_id, std::pair<int, int>point_1, std::pair<int, int>point_2)
 {
-    int y_1 = point_1.first;
-    int x_1 = point_1.second;
-    int y_2 = point_2.first;
-    int x_2 = point_2.second;
+//    int y_1 = point_1.first;
+//    int x_1 = point_1.second;
+//    int y_2 = point_2.first;
+//    int x_2 = point_2.second;
+    int y_1 = point_1.second;
+    int x_1 = point_1.first;
+    int y_2 = point_2.second;
+    int x_2 = point_2.first;
     if (y_1 == y_2)/*竖着的杆子*/
     {
         if (x_1 < x_2)/*point_1 | point_2*/

@@ -3,8 +3,7 @@
 
 App::App()
 {
-  // 进行一些view层的信号与槽函数的绑定工作
-  // 但是现在还不能确定
+
    qDebug() << "App()      成功连接";
 }
 
@@ -216,8 +215,8 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         // 调用view里面的ShowRemoveBarrier
         barrierTypeRemove = view.data()->ShowRemoveBarrier(curActivePlayer, correctPointRemove);
         // 设定执行的数据，调整状态机
-        pos4_.first = (correctPoint.x() - 300) / 100;
-        pos4_.second = correctPoint.y() / 100;
+        pos4_.first = (correctPointRemove.x() - 300) / 100;
+        pos4_.second = correctPointRemove.y() / 100;
         pos1_.first = pos4_.first - 1;
         pos1_.second = pos4_.second - 1;
         pos2_.first = pos4_.first;
@@ -330,8 +329,9 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         // 再修改viewModel层的数据————无
         // 最后修改view层的数据
         view->RemoveBarrier_ui();
-
+        qDebug() << "跳出RemoveBarrier_ui";
         stateMachine->SetActivePlayerCommand();
+        qDebug() << "跳出stateMachine->SetActivePlayerCommand()";
         break;
     }
     break;
