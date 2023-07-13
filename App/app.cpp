@@ -265,7 +265,7 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
         // waiting
         if (view.data()->JudgeVictory(curActivePlayer) == true)
         {
-            qDebug() << curActivePlayer << "胜利";
+            qDebug() << "Player " << curActivePlayer + 1 << "胜利";
             if (curActivePlayer == FIRST)
             {
                 view.data()->set_game_status(FIRST_WIN);
