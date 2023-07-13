@@ -4,7 +4,7 @@
 App::App()
 {
 
-   qDebug() << "App()      成功连接";
+  qDebug() << "App()      成功连接";
 }
 
 void App::InitGameEnv()
@@ -27,13 +27,11 @@ void App::InitGameEnv()
 
   QObject::connect(view.data(), SIGNAL(singleClickedSignal(QPoint, bool)), this, SLOT(When_Clicked(QPoint, bool)));
   QObject::connect(view.data(), SIGNAL(doubleClickedSignal(QPoint, bool)), this, SLOT(When_Clicked(QPoint, bool)));
-
 }
 void App::Run()
 {
   qDebug() << "Run()";
   view->show();
-
 }
 void App::ExitGame()
 {
@@ -42,11 +40,11 @@ void App::ExitGame()
 void App::When_Clicked(QPoint clickedPosition, bool clickType)
 {
   // 调用view判断区域是否在地图里的函数
-  if (!view.data()->ClickedInMap(clickedPosition))     // 返回false说明点在了非map区域
+  if (!view.data()->ClickedInMap(clickedPosition)) // 返回false说明点在了非map区域
   {
-      // 如果已经返回了false，这时已经弹出了提示框，我这直接返回就行
-      qDebug() << "点击Map以外";
-      return;
+    // 如果已经返回了false，这时已经弹出了提示框，我这直接返回就行
+    qDebug() << "点击Map以外";
+    return;
   }
   qDebug() << "进入槽函数";
   // qDebug() << "When_clicked";
@@ -99,33 +97,34 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
   case ActivePlayer:
     qDebug() << "ActivePlayer状态，将进行selectOperation命令";
     // 继续判断是否点击在了ActivePlayer
-    if (clickType == ClickType::LeftSingleClicked)     // 单击
+    if (clickType == ClickType::LeftSingleClicked) // 单击
     {
-        if (view.data()->ClickedInPlayer(curActivePlayer, clickedPosition))
-        {
-            qDebug() << "点击头像";
-            // 调用viewModel，selectOperation
-            stateMachine->SelectOperationCommand(Move);
-            When_Clicked(clickedPosition, true);
-            return;
-        } else {    // 意味着用户要放Barrier
-            qDebug() << "要放置Barrier";
-
-            // 调用viewModel, selectOperation
-            stateMachine->SelectOperationCommand(PlaceBarrier);
-            // 递归调用When_Clicked();
-            When_Clicked(clickedPosition, true);
-        }
-    }
-    else        // 双击，意味着要RemoveBarrier
-    {
-        qDebug() << "要移除Barrier";
+      if (view.data()->ClickedInPlayer(curActivePlayer, clickedPosition))
+      {
+        qDebug() << "点击头像";
         // 调用viewModel，selectOperation
-        stateMachine->SelectOperationCommand(RemoveBarrier);
+        stateMachine->SelectOperationCommand(Move);
+        When_Clicked(clickedPosition, true);
+        return;
+      }
+      else
+      { // 意味着用户要放Barrier
+        qDebug() << "要放置Barrier";
+
+        // 调用viewModel, selectOperation
+        stateMachine->SelectOperationCommand(PlaceBarrier);
         // 递归调用When_Clicked();
         When_Clicked(clickedPosition, true);
+      }
     }
-
+    else // 双击，意味着要RemoveBarrier
+    {
+      qDebug() << "要移除Barrier";
+      // 调用viewModel，selectOperation
+      stateMachine->SelectOperationCommand(RemoveBarrier);
+      // 递归调用When_Clicked();
+      When_Clicked(clickedPosition, true);
+    }
 
     break;
   case Operation:
@@ -133,101 +132,108 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
     // 再套一个switch case用于分支到底是Move PlaceBarrier RemoveBarrier
     switch (curOperation)
     {
-      case Move:
-        qDebug() << "用户要move";
-        // 调用view，显示箭头，需要修正坐标
-        correctPointMove.setX(clickedPosition.x()/100*100);
-        correctPointMove.setY(clickedPosition.y()/100*100);
-        qDebug() << "correctPointMove.setX" << correctPointMove.x();
-        view.data()->ShowArrowAround(correctPointMove);
-        // 接着用户需要在“上下左右”键中选择一个按下
-        keyBoardDirection = view.data()->GetDirectionFromKeyboard();
-        // 设定执行的数据，调整状态机
-        qDebug() << "keyBoardDirection = " << keyBoardDirection;
-        pos1.first = (correctPointMove.x() - 300) / 100;
-        pos1.second = correctPointMove.y() / 100;
-        qDebug() << "move左上基准点的index" << "fir" << pos1.first << "sec" << pos1.second;
-        switch (keyBoardDirection)
-        {
-          case Up:
-            pos2.first = pos1.first;
-            pos2.second = pos1.second - 1;
-            break;
-          case Down:
-            pos2.first = pos1.first;
-            pos2.second = pos1.second + 1;
-            break;
-          case Left:
-            pos2.first = pos1.first - 1;
-            pos2.second = pos1.second;
-            break;
-          case Right:
-            pos2.first = pos1.first + 1;
-            pos2.second = pos1.second;
-            break;
-        }
-        qDebug() << "move终点的index" << "fir" << pos2.first << "sec" << pos2.second;
-        stateMachine->SetExecutionInfo(keyBoardDirection, pos1, pos2);
-        stateMachine->SelectPositionCommand();
-        // 递归调用，这时候就去到AtomicExecute了
-        When_Clicked(clickedPosition, true);
+    case Move:
+      qDebug() << "用户要move";
+      // 调用view，显示箭头，需要修正坐标
+      correctPointMove.setX(clickedPosition.x() / 100 * 100);
+      correctPointMove.setY(clickedPosition.y() / 100 * 100);
+      qDebug() << "correctPointMove.setX" << correctPointMove.x();
+      view.data()->ShowArrowAround(correctPointMove);
+      // 接着用户需要在“上下左右”键中选择一个按下
+      keyBoardDirection = view.data()->GetDirectionFromKeyboard();
+      // 设定执行的数据，调整状态机
+      qDebug() << "keyBoardDirection = " << keyBoardDirection;
+      pos1.first = (correctPointMove.x() - 300) / 100;
+      pos1.second = correctPointMove.y() / 100;
+      qDebug() << "move左上基准点的index"
+               << "fir" << pos1.first << "sec" << pos1.second;
+      switch (keyBoardDirection)
+      {
+      case Up:
+        pos2.first = pos1.first;
+        pos2.second = pos1.second - 1;
         break;
-      case PlaceBarrier:
-        qDebug() << "用户要PlaceBarrier" << clickedPosition;
-        // 调用view里面的函数来修订坐标
-        correctPoint = view.data()->CorrectBarrierPosition(clickedPosition);
-        qDebug() << "修正坐标" << correctPoint;
-        // 调用view里面的ShowPossibleBarrier，会在里面设定好的
-        barrierTypePlaced = view.data()->ShowPossibleBarrier(curActivePlayer, correctPoint, BarrierType::horizontal);
-        // 设定执行的数据，调整状态机
-        pos4_.first = (correctPoint.x() - 300) / 100;
-        pos4_.second = correctPoint.y() / 100;
-        pos1_.first = pos4_.first - 1;
-        pos1_.second = pos4_.second - 1;
-        pos2_.first = pos4_.first;
-        pos2_.second = pos4_.second - 1;
-        pos3_.first = pos4_.first - 1;
-        pos3_.second = pos4_.second;
-        qDebug() << "PlaceBarrier四个点的index";
-        qDebug() << "fir" << pos1_.first << "sec" << pos1_.second;
-        qDebug() << "fir" << pos2_.first << "sec" << pos2_.second;
-        qDebug() << "fir" << pos3_.first << "sec" << pos3_.second;
-        qDebug() << "fir" << pos4_.first << "sec" << pos4_.second;
+      case Down:
+        pos2.first = pos1.first;
+        pos2.second = pos1.second + 1;
+        break;
+      case Left:
+        pos2.first = pos1.first - 1;
+        pos2.second = pos1.second;
+        break;
+      case Right:
+        pos2.first = pos1.first + 1;
+        pos2.second = pos1.second;
+        break;
+      }
+      qDebug() << "move终点的index"
+               << "fir" << pos2.first << "sec" << pos2.second;
+      stateMachine->SetExecutionInfo(keyBoardDirection, pos1, pos2);
+      stateMachine->SelectPositionCommand();
+      // 递归调用，这时候就去到AtomicExecute了
+      When_Clicked(clickedPosition, true);
+      break;
+    case PlaceBarrier:
+      qDebug() << "用户要PlaceBarrier" << clickedPosition;
+      // 调用view里面的函数来修订坐标
+      correctPoint = view.data()->CorrectBarrierPosition(clickedPosition);
+      qDebug() << "修正坐标" << correctPoint;
+      // 调用view里面的ShowPossibleBarrier，会在里面设定好的
+      barrierTypePlaced = view.data()->ShowPossibleBarrier(curActivePlayer, correctPoint, BarrierType::horizontal);
+      // 设定执行的数据，调整状态机
+      pos4_.first = (correctPoint.x() - 300) / 100;
+      pos4_.second = correctPoint.y() / 100;
+      pos1_.first = pos4_.first - 1;
+      pos1_.second = pos4_.second - 1;
+      pos2_.first = pos4_.first;
+      pos2_.second = pos4_.second - 1;
+      pos3_.first = pos4_.first - 1;
+      pos3_.second = pos4_.second;
+      qDebug() << "PlaceBarrier四个点的index";
+      qDebug() << "fir" << pos1_.first << "sec" << pos1_.second;
+      qDebug() << "fir" << pos2_.first << "sec" << pos2_.second;
+      qDebug() << "fir" << pos3_.first << "sec" << pos3_.second;
+      qDebug() << "fir" << pos4_.first << "sec" << pos4_.second;
 
-        stateMachine->SetPlaceBarrierExecInfo(barrierTypePlaced, pos1_, pos2_, pos3_, pos4_);
-        stateMachine->SelectPositionCommand();
-        // 递归调用，这时候就去到了AtomicExecute
-        When_Clicked(clickedPosition, true);
-        break;
-      case RemoveBarrier:
-        qDebug() << "用户要RemoveBarrier" << clickedPosition;
-        // 调用view里面的函数来修订坐标
-        correctPointRemove = view.data()->CorrectBarrierPosition(clickedPosition);
-        qDebug() << "修正坐标" << correctPointRemove;
-        // 要调用view里面的某一个未实现的函数，来判断这个修正后的坐标上是否有可以删除的障碍
-        if (view.data()->JudgeBarrierRemovedExistence(correctPointRemove) == false)
-        {
-            qDebug() << "No Barrier";
-            // rollback
-            // 弹出提示
-        }
-        qDebug() << "Have Barrier";
-        // 调用view里面的ShowRemoveBarrier
-        barrierTypeRemove = view.data()->ShowRemoveBarrier(curActivePlayer, correctPointRemove);
-        // 设定执行的数据，调整状态机
-        pos4_.first = (correctPointRemove.x() - 300) / 100;
-        pos4_.second = correctPointRemove.y() / 100;
-        pos1_.first = pos4_.first - 1;
-        pos1_.second = pos4_.second - 1;
-        pos2_.first = pos4_.first;
-        pos2_.second = pos4_.second - 1;
-        pos3_.first = pos4_.first - 1;
-        pos3_.second = pos4_.second;
-        stateMachine->SetRemoveBarrierExecInfo(barrierTypeRemove, pos1_, pos2_, pos3_, pos4_);
-        stateMachine->SelectPositionCommand();
-        // 递归调用，这时候就去到了AtomicExecute
-        When_Clicked(clickedPosition, true);
-        break;
+      stateMachine->SetPlaceBarrierExecInfo(barrierTypePlaced, pos1_, pos2_, pos3_, pos4_);
+      stateMachine->SelectPositionCommand();
+      // 递归调用，这时候就去到了AtomicExecute
+      When_Clicked(clickedPosition, true);
+      break;
+    case RemoveBarrier:
+      qDebug() << "用户要RemoveBarrier" << clickedPosition;
+      // 调用view里面的函数来修订坐标
+      correctPointRemove = view.data()->CorrectBarrierPosition(clickedPosition);
+      qDebug() << "修正坐标" << correctPointRemove;
+      // 要调用view里面的某一个未实现的函数，来判断这个修正后的坐标上是否有可以删除的障碍
+      if (view.data()->JudgeBarrierRemovedExistence(correctPointRemove) == false)
+      {
+        qDebug() << "No Barrier";
+        // rollback
+        // 弹出提示
+      }
+      qDebug() << "Have Barrier";
+      // 调用view里面的ShowRemoveBarrier
+      barrierTypeRemove = view.data()->ShowRemoveBarrier(curActivePlayer, correctPointRemove);
+      // 设定执行的数据，调整状态机
+      pos4_.first = (correctPointRemove.x() - 300) / 100;
+      pos4_.second = correctPointRemove.y() / 100;
+      pos1_.first = pos4_.first - 1;
+      pos1_.second = pos4_.second - 1;
+      pos2_.first = pos4_.first;
+      pos2_.second = pos4_.second - 1;
+      pos3_.first = pos4_.first - 1;
+      pos3_.second = pos4_.second;
+      qDebug() << "RemoveBarrier四个点的index";
+      qDebug() << "fir" << pos1_.first << "sec" << pos1_.second;
+      qDebug() << "fir" << pos2_.first << "sec" << pos2_.second;
+      qDebug() << "fir" << pos3_.first << "sec" << pos3_.second;
+      qDebug() << "fir" << pos4_.first << "sec" << pos4_.second;
+      stateMachine->SetRemoveBarrierExecInfo(barrierTypeRemove, pos1_, pos2_, pos3_, pos4_);
+      stateMachine->SelectPositionCommand();
+      // 递归调用，这时候就去到了AtomicExecute
+      When_Clicked(clickedPosition, true);
+      break;
     }
 
     break;
@@ -236,103 +242,152 @@ void App::When_Clicked(QPoint clickedPosition, bool clickType)
     // 根据OperationType进行分支：
     switch (curOperation)
     {
-      case Move:
-        qDebug() << "ExecuteMove";
-        qDebug() << "execPos1 = " << execPos1.first << "," << execPos1.second;
-        qDebug() << "execPos2 = " << execPos2.first << "," << execPos2.second;
-        // 判断能不能走
-        if (Map_->Accessible(execPos1, execPos2) == true)
+    case Move:
+      qDebug() << "ExecuteMove";
+      qDebug() << "execPos1 = " << execPos1.first << "," << execPos1.second;
+      qDebug() << "execPos2 = " << execPos2.first << "," << execPos2.second;
+      // 判断能不能走
+      if (Map_->Accessible(execPos1, execPos2) == true)
+      {
+        // 修改model层的数据——无
+        qDebug() << "yes";
+        // 修改viewModel
+        stateMachine->SetPosition(curActivePlayer, execPos2);
+        // 修改view
+        view->MoveActivePlayerPos(curActivePlayer, execDirection);
+      }
+      else
+      {
+        qDebug() << "NOT";
+      }
+      // 判断move后是否达成胜利条件
+      // waiting
+      if (view.data()->JudgeVictory(curActivePlayer) == true)
+      {
+        qDebug() << curActivePlayer << "胜利";
+        if (curActivePlayer == FIRST)
         {
-            // 修改model层的数据——无
-                qDebug() << "yes";
-            // 修改viewModel
-            stateMachine->SetPosition(curActivePlayer, execPos2);
-            // 修改view
-            view->MoveActivePlayerPos(curActivePlayer, execDirection);
+          view.data()->set_game_status(FIRST_WIN);
+        }
+        else
+        {
+          view.data()->set_game_status(SECOND_WIN);
+        }
+      }
 
-        }
-        else
-        {
-            qDebug() << "NOT";
-        }
-        // 判断move后是否达成胜利条件
-        // waiting
-        if (view.data()->JudgeVictory(curActivePlayer) == true)
-        {
-            qDebug() << curActivePlayer << "胜利";
-            if (curActivePlayer == FIRST)
-            {
-                view.data()->set_game_status(FIRST_WIN);
-            }
-            else
-            {
-                view.data()->set_game_status(SECOND_WIN);
-            }
+      // 修改界面信息
+      if (curActivePlayer == FIRST)
+      {
+        view->increase_text_round_1();
+        view->set_text_player(SECOND);
+      }
+      else
+      {
+        view->increase_text_round_2();
+        view->set_text_player(FIRST);
+      }
 
-        }
-        // 设置状态机，进入后手的ActivePlayer状态
-        stateMachine->SetActivePlayerCommand();
-        break;
-      case PlaceBarrier:
-        qDebug() << "ExecutePlaceBarrier";
-        qDebug() << "execPlace1" << "fir" << execPlace1.first << "sec" << execPlace1.second;
-        qDebug() << "execPlace2" << "fir" << execPlace2.first << "sec" << execPlace2.second;
-        qDebug() << "execPlace3" << "fir" << execPlace3.first << "sec" << execPlace3.second;
-        qDebug() << "execPlace4" << "fir" << execPlace4.first << "sec" << execPlace4.second;
-        // 调JudgePlaceBarrier
-        // waiting 没有debug
-        if (Map_->JudgePlaceBarrier(execPlaceBarrierType, execPlace1, execPlace2, execPlace3, execPlace4) == false)
-        {
-            // rollback
-            qDebug() << "NOT";
-        }
-        else
-        {
-            qDebug() << "Yes";
-        }
-        // 这里还需要调用judgeSolution函数
-        // waiting
-        // 先修改model层的数据
-        if (execPlaceBarrierType == BarrierType::horizontal)    // 水平
-        {
-            Map_->Remove(curActivePlayer, execPlace1, execPlace3);
-            Map_->Remove(curActivePlayer, execPlace2, execPlace4);
-        }
-        else
-        {
-            Map_->Remove(curActivePlayer, execPlace1, execPlace2);
-            Map_->Remove(curActivePlayer, execPlace3, execPlace4);
-        }
+      // 设置状态机，进入后手的ActivePlayer状态
+      stateMachine->SetActivePlayerCommand();
+      break;
+    case PlaceBarrier:
+      qDebug() << "ExecutePlaceBarrier";
+      qDebug() << "execPlace1"
+               << "fir" << execPlace1.first << "sec" << execPlace1.second;
+      qDebug() << "execPlace2"
+               << "fir" << execPlace2.first << "sec" << execPlace2.second;
+      qDebug() << "execPlace3"
+               << "fir" << execPlace3.first << "sec" << execPlace3.second;
+      qDebug() << "execPlace4"
+               << "fir" << execPlace4.first << "sec" << execPlace4.second;
+      // 调JudgePlaceBarrier
+      // waiting 没有debug
+      if (Map_->JudgePlaceBarrier(execPlaceBarrierType, execPlace1, execPlace2, execPlace3, execPlace4) == false)
+      {
+        // rollback
+        qDebug() << "NOT";
+      }
+      else
+      {
+        qDebug() << "Yes";
+      }
+      // 这里还需要调用judgeSolution函数
+      // waiting
+      // 先修改model层的数据
+      if (execPlaceBarrierType == BarrierType::horizontal) // 水平
+      {
+        Map_->Remove(curActivePlayer, execPlace1, execPlace3);
+        Map_->Remove(curActivePlayer, execPlace2, execPlace4);
+      }
+      else
+      {
+        Map_->Remove(curActivePlayer, execPlace1, execPlace2);
+        Map_->Remove(curActivePlayer, execPlace3, execPlace4);
+      }
 
-        // 再修改viewModel层的数据————无
-        // 最后修改view层的数据
-        // view要改什么东西？画Barrier、文字提示的更新、vector<> Barrier_ui_List
-        view->PlaceBarrier_ui();
-        // 设置状态机，进入后手的ActivePlayer状态
-        stateMachine->SetActivePlayerCommand();
-        break;
-      case RemoveBarrier:
-        qDebug() << "ExecuteRemoveBarrier";
-        // 先修改model层的数据
-        // waiting 还没有debug
-        if (execPlaceBarrierType == BarrierType::horizontal)    // 水平
-        {
-            Map_->Add(curActivePlayer, execPlace1, execPlace3);
-            Map_->Add(curActivePlayer, execPlace2, execPlace4);
-        }
-        else
-        {
-            Map_->Add(curActivePlayer, execPlace1, execPlace2);
-            Map_->Add(curActivePlayer, execPlace3, execPlace4);
-        }
-        qDebug() << "跳出add";
-        // 再修改viewModel层的数据————无
-        // 最后修改view层的数据
-        view->RemoveBarrier_ui();
-        qDebug() << "跳出RemoveBarrier_ui";
-        stateMachine->SetActivePlayerCommand();
-        qDebug() << "跳出stateMachine->SetActivePlayerCommand()";
-        break;
+      // 再修改viewModel层的数据————无
+      // 最后修改view层的数据
+      // view要改什么东西？画Barrier、文字提示的更新、vector<> Barrier_ui_List
+      view->PlaceBarrier_ui();
+
+      // 修改界面信息
+      if (curActivePlayer == FIRST)
+      {
+        view->increase_text_round_1();
+        view->set_text_player(SECOND);
+      }
+      else
+      {
+        view->increase_text_round_2();
+        view->set_text_player(FIRST);
+      }
+
+      // 设置状态机，进入后手的ActivePlayer状态
+      stateMachine->SetActivePlayerCommand();
+      break;
+    case RemoveBarrier:
+      qDebug() << "ExecuteRemoveBarrier";
+      qDebug() << "execPlace1"
+               << "fir" << execPlace1.first << "sec" << execPlace1.second;
+      qDebug() << "execPlace2"
+               << "fir" << execPlace2.first << "sec" << execPlace2.second;
+      qDebug() << "execPlace3"
+               << "fir" << execPlace3.first << "sec" << execPlace3.second;
+      qDebug() << "execPlace4"
+               << "fir" << execPlace4.first << "sec" << execPlace4.second;
+      // 先修改model层的数据
+      // waiting 还没有debug
+      if (execPlaceBarrierType == BarrierType::horizontal) // 水平
+      {
+        Map_->Add(curActivePlayer, execPlace1, execPlace3);
+        Map_->Add(curActivePlayer, execPlace2, execPlace4);
+      }
+      else
+      {
+        Map_->Add(curActivePlayer, execPlace1, execPlace2);
+        Map_->Add(curActivePlayer, execPlace3, execPlace4);
+      }
+      qDebug() << "跳出add";
+      // 再修改viewModel层的数据————无
+      // 最后修改view层的数据
+      view->RemoveBarrier_ui();
+      qDebug() << "跳出RemoveBarrier_ui";
+
+      // 修改界面信息
+      if (curActivePlayer == FIRST)
+      {
+        view->increase_text_round_1();
+        view->set_text_player(SECOND);
+      }
+      else
+      {
+        view->increase_text_round_2();
+        view->set_text_player(FIRST);
+      }
+
+      stateMachine->SetActivePlayerCommand();
+      qDebug() << "跳出stateMachine->SetActivePlayerCommand()";
+      break;
     }
     break;
   }

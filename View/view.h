@@ -58,6 +58,9 @@ public:
     int get_remove_barrier_index();
     // BarrierType ShowRemoveBarrier(PlayerId activePlayer, QPoint point);
     bool JudgeVictory(PlayerId activePlayer);
+    void increase_text_round_1();
+    void increase_text_round_2();
+    void set_text_player(PlayerId player);
 
 signals:
     void singleClickedSignal(QPoint pos, bool clickType);
