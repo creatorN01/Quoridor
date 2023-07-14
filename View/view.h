@@ -67,6 +67,7 @@ signals:
     void doubleClickedSignal(QPoint pos, bool clickType);
     void keyPressSignal(Direction direction);
     void BarrierSignal(bool fixed);
+    void removeBarrierSignal();
 
 
 public slots:
@@ -95,11 +96,13 @@ private:
     TextPrompt *info;
     // 墓碑障碍
     int remove_barrier_index;
+    // 回收站
+    QSharedPointer<std::vector<QSharedPointer<Barrier_ui>>> rubbish_bin;
 
     // 使用定时器区分鼠标signalClicked与doubleClicked
     QTimer *_clickTimer = nullptr;
-    int _clickCount = 0;    // 点击次数
-    QPoint clickedPosition; // 点击位置
+    int _clickCount = 0;        // 点击次数
+    QPoint clickedPosition;     // 点击位置
 
     // 游戏状态
     GameStatus game_status;

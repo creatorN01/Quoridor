@@ -160,6 +160,9 @@ void View::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Space:
         emit BarrierSignal(true);
         break;
+    case Qt::Key_J:
+        emit removeBarrierSignal();
+        break;
     }
 }
 // 用于判断与修正
@@ -252,9 +255,10 @@ BarrierType View::ShowRemoveBarrier(PlayerId activePlayer, QPoint point)
     update();
 
     QEventLoop loop;
-    QObject::connect(this, SIGNAL(BarrierSignal(bool)), &loop, SLOT(quit()));
+    QObject::connect(this, SIGNAL(removeBarrierSignal()), &loop, SLOT(quit()));
+
     loop.exec();
-    qDebug() << "ShowRemoveBarrier收到空格信号";
+    qDebug() << "ShowRemoveBarrier收到Enter信号";
 
     return (*vectorPtr)[remove_barrier_index]->get_type();
 }
@@ -343,15 +347,17 @@ void View::RemoveBarrier_ui()
     // swap
     std::vector<QSharedPointer<Barrier_ui>> *vectorPtr = Barrier_ui_List.data();
     int size = (int)(vectorPtr->size());
+    qDebug() << "View::RemoveBarrier_ui()     (int)(vectorPtr->size())" << (int)(vectorPtr->size());
     auto temp = (*vectorPtr)[remove_barrier_index];
     (*vectorPtr)[remove_barrier_index] = (*vectorPtr)[size - 1];
     (*vectorPtr)[size - 1] = temp;
+    rubbish_bin->push_back(temp);
     // pop_back
     (*vectorPtr).pop_back();
     // 重绘
     qDebug() << "after swap and pop";
-    qDebug() << "update()";
     update();
+    qDebug() << "update()";
 }
 
 bool View::JudgeBarrierRemovedExistence(QPoint point)

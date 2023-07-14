@@ -31,14 +31,12 @@ public:
     bool IfFixed(){return this->ifFixed;}
 
 private:
-    // 四种图像作为静态成员存储更合适一些，所有的对象共用一份
-    // 不知道会不会在显示的时候出bug...实在不行，再改
     QPixmap img_barrier1_row;
     QPixmap img_barrier1_column;
     QPixmap img_barrier2_row;
     QPixmap img_barrier2_column;
 
-    // 基准点坐标，就中心点好了
+    // 左上角坐标
     QPoint pos;
     // 是谁放置的
     PlayerId playerId;
